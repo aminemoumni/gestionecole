@@ -44,6 +44,11 @@ class Epreuve
      */
     private $notes;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=classe::class, inversedBy="epreuves")
+     */
+    private $class_id;
+
     public function __construct()
     {
         $this->notes = new ArrayCollection();
@@ -128,6 +133,18 @@ class Epreuve
                 $note->setEpreuve(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getClassId(): ?classe
+    {
+        return $this->class_id;
+    }
+
+    public function setClassId(?classe $class_id): self
+    {
+        $this->class_id = $class_id;
 
         return $this;
     }
