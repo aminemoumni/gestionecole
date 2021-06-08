@@ -88,7 +88,7 @@ class Inscription
     private $telMere;
 
     /**
-     * @ORM\ManyToOne(targetEntity=classe::class, inversedBy="inscriptions")
+     * @ORM\ManyToOne(targetEntity=Classe::class, inversedBy="inscriptions")
      */
     private $classe;
 

@@ -45,7 +45,7 @@ class Epreuve
     private $notes;
 
     /**
-     * @ORM\ManyToOne(targetEntity=classe::class, inversedBy="epreuves")
+     * @ORM\ManyToOne(targetEntity=Classe::class, inversedBy="epreuves")
      */
     private $classe;
 

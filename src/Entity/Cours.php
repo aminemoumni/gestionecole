@@ -38,7 +38,7 @@ class Cours
     private $designation;
 
     /**
-     * @ORM\ManyToOne(targetEntity=classe::class, inversedBy="cours")
+     * @ORM\ManyToOne(targetEntity=Classe::class, inversedBy="cours")
      */
     private $classe;
 

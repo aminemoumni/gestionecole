@@ -1,1 +1,345 @@
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit; }
 
+html {
+  font-size: 62.5%;
+  box-sizing: border-box; }
+  @media only screen and (max-width: 75em) {
+    html {
+      font-size: 50%; } }
+  @media only screen and (max-width: 37.5em) {
+    html {
+      font-size: 40%; } }
+
+body {
+  font-family: "Montserrat", sans-serif;
+  color: #333;
+  font-weight: 400;
+  line-height: 1.6; }
+
+.row {
+  max-width: 114rem;
+  margin: 0 auto; }
+
+.mr {
+  margin-right: 1.6rem; }
+
+.ml {
+  margin-left: 1.6rem; }
+
+.mt {
+  margin-top: 1.6rem; }
+
+.mb {
+  margin-bottom: 1.6rem; }
+
+.ma {
+  margin: 0 auto; }
+
+.body {
+  background-color: #3F83C4; }
+
+.loginActive {
+  width: 1000px !important;
+  height: 500px !important;
+  border-radius: 30px !important; }
+
+.login {
+  width: 20px;
+  height: 20px;
+  background-color: white;
+  border-radius: 50%;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  overflow: hidden;
+  animation: down 3s;
+  animation-fill-mode: forwards;
+  animation-timing-function: ease-in;
+  transition: all 1.5s; }
+  .login__container {
+    width: 100%;
+    height: 100%;
+    display: flex; }
+  .login__image {
+    flex: 0 0 50%;
+    background-image: url("../images/desk-with-a-laptop-a-cup-of-coffee-and-a-calendar.jpg");
+    background-position: right;
+    background-size: cover;
+    opacity: 0; }
+  .login__content {
+    padding: 3rem 4rem;
+    width: 100%;
+    position: relative;
+    display: none; }
+    .login__content h1 {
+      font-size: 3rem;
+      text-transform: uppercase;
+      color: #3F83C4;
+      margin-bottom: 4rem;
+      text-align: center; }
+    .login__content .copyright {
+      position: absolute;
+      display: block;
+      width: 100%;
+      bottom: .5rem;
+      text-align: center;
+      left: 50%;
+      font-size: 1.1rem;
+      transform: translateX(-50%);
+      font-weight: 600; }
+      .login__content .copyright i {
+        color: red; }
+  .login__form {
+    text-align: center;
+    width: 100%; }
+    .login__form--input {
+      display: block;
+      width: 80%;
+      margin: 2rem auto;
+      border: 1px solid #333;
+      padding: .7rem 1rem;
+      border-radius: 10px;
+      outline: none;
+      font-size: 1.6rem; }
+    .login__form button {
+      padding: .5rem 3.5rem;
+      border: 1px solid #3F83C4;
+      border-radius: 500px;
+      cursor: pointer;
+      font-size: 1.4rem;
+      margin-bottom: 1.6rem;
+      background-color: #3F83C4;
+      color: white;
+      outline: none; }
+    .login__form p {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 8rem;
+      position: relative; }
+      .login__form p span a {
+        color: #3F83C4;
+        text-decoration: none; }
+        .login__form p span a:hover {
+          border-bottom: 1px solid #3F83C4; }
+      .login__form p::after {
+        content: "";
+        width: 80%;
+        height: 1px;
+        background-color: black;
+        position: absolute;
+        bottom: -4rem;
+        left: 50%;
+        transform: translateX(-50%); }
+  .login__social {
+    text-align: center;
+    text-transform: uppercase; }
+    .login__social h2 {
+      font-size: 2rem;
+      color: #3F83C4;
+      margin-bottom: 2rem; }
+    .login__social--apps i {
+      font-size: 2.6rem; }
+      .login__social--apps i:not(:last-child) {
+        margin-right: 1.6rem; }
+
+@keyframes down {
+  0% {
+    top: 0%; }
+  60% {
+    top: 50%; }
+  70% {
+    top: 48%;
+    box-shadow: 0 2rem 1rem rgba(0, 0, 0, 0.5); }
+  80% {
+    top: 50%; }
+  90% {
+    top: 49%;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.5); }
+  100% {
+    top: 50%; } }
+
+/*Admin*/
+.content {
+  margin-left: 240px;
+  transition: all .5s; }
+
+.activeRotate {
+  transform: rotate(180deg);
+  transition: all .2s; }
+
+.activeSidebare {
+  left: -240px !important;
+  transition: all .5s; }
+
+.activeContent {
+  margin-left: 0 !important;
+  transition: all .5s; }
+
+.header {
+  box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.1);
+  z-index: 9; }
+  .header__container {
+    padding: 1rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center; }
+  .header__logo {
+    display: flex;
+    align-items: center; }
+    .header__logo h3 {
+      color: #3F83C4;
+      font-weight: 600;
+      font-size: 2.2rem;
+      /* font-family: "Yeseva One", cursive;  */
+    }
+    .header__logo--burger {
+      margin-right: 1.6rem;
+      cursor: pointer; }
+      .header__logo--burger i {
+        font-size: 2rem;
+        color: #1f3f5e; }
+        .header__logo--burger i:not(:last-child) {
+          margin-right: -2px; }
+  .header__profile {
+    border-left: 1px solid #eee;
+    padding: 0 0 0 1rem;
+    position: relative; }
+    .header__profile--image {
+      display: flex;
+      align-items: center;
+      cursor: pointer; }
+      .header__profile--image img {
+        width: 40px;
+        border-radius: 10px;
+        margin-left: 1.4rem; }
+      .header__profile--image p {
+        font-size: 1.2rem;
+        display: block;
+        color: #999;
+        margin-bottom: 0rem !important;
+    }
+    .header__profile--menu {
+      display: none;
+      position: absolute;
+      top: 130%;
+      right: 0;
+      padding: 1rem 0 .5rem 0;
+      background-color: white;
+      border-radius: 10px;
+      width: 150px;
+      box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1); }
+      .header__profile--menu h4 {
+        display: block;
+        font-size: 1.2rem;
+        text-align: center; }
+      .header__profile--menu p {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #3F83C4;
+        text-align: center; }
+      .header__profile--menu ul {
+        list-style-type: none;
+        margin-top: 1.5rem;
+        text-align: center; }
+        .header__profile--menu ul li:not(:last-child) {
+          border-bottom: 1px solid rgba(63, 131, 196, 0.5); }
+        .header__profile--menu ul li a {
+          color: #333;
+          text-decoration: none;
+          font-size: 1.6rem;
+          font-weight: 400;
+          display: block;
+          transition: all .5s;
+          letter-spacing: 1px; }
+          .header__profile--menu ul li a:hover {
+            background-color: #3F83C4;
+            color: white; }
+
+.sidebar {
+  height: 100%;
+  width: 240px;
+  background-image: linear-gradient(to bottom, #3F83C4, #1f3f5e);
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 8;
+  transition: all .5s; }
+  .sidebar__header {
+    text-align: center;
+    padding: 1.5rem 2rem;
+    height: 10vh; }
+    .sidebar__header h3 {
+      color: white;
+      font-weight: 600;
+      font-size: 2.5rem;
+      /* font-family: "Yeseva One", cursive;  */
+    }
+  .sidebar__body {
+    margin-top: 3rem;
+    padding: 3rem 1rem;
+    height: 90vh; }
+    .sidebar__body .ul {
+      list-style-type: none;
+      height: 85%; }
+      .sidebar__body .ul .li {
+        font-size: 1.4rem;
+        margin-bottom: 1rem;
+        background-color: #5498d8;
+        border-radius: 10px;
+        transition: background-color .5s;
+        overflow: hidden; }
+        .sidebar__body .ul .li:hover {
+          background-color: rgba(84, 152, 216, 0.5); }
+        .sidebar__body .ul .li__a {
+          cursor: pointer; }
+        .sidebar__body .ul .li a {
+          text-decoration: none;
+          color: white;
+          display: flex;
+          align-items: center;
+          padding: 1rem 1.5rem; }
+          .sidebar__body .ul .li a span:first-child {
+            margin-right: 2rem; }
+          .sidebar__body .ul .li a .bi-caret-down-fill {
+            margin-left: auto;
+            font-size: 1.2rem;
+            transition: all .2s; }
+        .sidebar__body .ul .li ul {
+          list-style-type: none;
+          display: none; }
+          .sidebar__body .ul .li ul li {
+            padding-left: 1.5rem; }
+            .sidebar__body .ul .li ul li:hover {
+              background-color: rgba(84, 152, 216, 0.9); }
+    .sidebar__body .settings {
+      cursor: pointer;
+      position: absolute;
+      bottom: 1rem;
+      width: 90%;
+      font-size: 1.6rem;
+      margin-bottom: 1rem;
+      background-color: rgba(153, 153, 153, 0.3);
+      border-radius: 10px;
+      list-style-type: none;
+      transition: background-color .5s; }
+      .sidebar__body .settings:hover {
+        background-color: rgba(153, 153, 153, 0.1); }
+      .sidebar__body .settings a {
+        text-decoration: none;
+        color: white;
+        display: flex;
+        align-items: center;
+        padding: .7rem 1.5rem;
+        font-weight: 400; }
+        .sidebar__body .settings a span:first-child {
+          margin-right: 2rem; }
+
+ol, ul {
+padding-left: 0rem !important;
+}

@@ -23,7 +23,7 @@ class Frais
     private $prix;
 
     /**
-     * @ORM\OneToOne(targetEntity=classe::class, inversedBy="frais", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=Classe::class, inversedBy="frais", cascade={"persist", "remove"})
      */
     private $classe;
 

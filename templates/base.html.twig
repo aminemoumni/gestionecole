@@ -2,11 +2,14 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
+        <title>{% block title %}GDE - Dashboard{% endblock %}</title>
         {# Run `composer require symfony/webpack-encore-bundle`
            and uncomment the following Encore helpers to start using Symfony UX #}
         {% block stylesheets %}
             {{ encore_entry_link_tags('app') }}
+            <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,700;0,800;1,300;1,400;1,500;1,700;1,800&display=swap" rel="stylesheet">
+            <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
+    
         {% endblock %}
 
         {% block javascripts %}
@@ -15,6 +18,89 @@
         {% endblock %}
     </head>
     <body>
-        {% block body %}{% endblock %}
+        
+         <div class="sidebar ">
+            <div class="sidebar__header">
+                <h3>Guegzosis</h3>
+            </div>
+            <div class="sidebar__body">
+                <ul class="ul">
+                    <li  class="li">
+                        <a class="li__a"><span class="fas fa-users"></span><span>Etudiant</span> <i class="bi bi-caret-down-fill activeRotate"></i></a>
+                        <ul style="display: block;">
+                            <li>
+                                <a href="{{path('etudiant_index')}}"><span class="fas fa-user-lock"></span><span>Ajouter etudiant</span></a>
+                            </li>
+                            <li>
+                                <a href=""><span class="fas fa-school"></span><span>List etudiant</span></a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li  class="li">
+                        <a class="li__a"><span class="fas fa-users"></span><span>Users</span> <i class="bi bi-caret-down-fill"></i></a>
+                        <ul>
+                            <li>
+                                <a href=""><span class="fas fa-user-lock"></span><span>Admins</span></a>
+                            </li>
+                            <li>
+                                <a href=""><span class="fas fa-school"></span><span>Students</span></a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li  class="li">
+                        <a class="li__a"><span class="fas fa-users"></span><span>Users</span> <i class="bi bi-caret-down-fill"></i></a>
+                        <ul>
+                            <li>
+                                <a href=""><span class="fas fa-user-lock"></span><span>Admins</span></a>
+                            </li>
+                            <li>
+                                <a href=""><span class="fas fa-school"></span><span>Students</span></a>
+                            </li>
+                        </ul>
+                    </li>
+                    
+                </ul>
+                <li class="li settings">
+                    <a class="li__a"><span class="bi bi-gear-fill"></span><span>Settings</span></a>
+                </li>
+            </div>
+        </div>
+
+        <main class="content ">
+            <header class="header">
+                <div class="header__container">
+                    <div class="header__logo">
+                        <div class="header__logo--burger ">
+                            <i class="fas fa-ellipsis-v"></i>
+                            <i class="fas fa-ellipsis-v"></i>
+                            <i class="fas fa-ellipsis-v"></i>
+                        </div>
+                        <h3>Dashboard</h3>
+                    </div>
+                    <div class="header__content">
+                        
+                    </div>
+                    <div class="header__profile">
+                        <div class="header__profile--image">
+                            <p>Amine Moumni</p>
+                            <img src="{{ asset('images/user.png') }}" alt="">
+                            <!-- <i class="fas fa-sort-down" id="menuProfile"></i> -->
+                        </div>
+
+                        <div class="header__profile--menu">
+                            
+                            <p>Developer</p>
+
+                            <ul>
+                                <li><a href="#">Profile</a></li>
+                                <li><a href="#">Logout</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            {% block body %}
+            {% endblock %}
+        </main>
     </body>
 </html>
