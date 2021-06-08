@@ -27,12 +27,12 @@ class Epreuve
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $heurDebut;
+    private $heureDebut;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $heurFin;
+    private $heureFin;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -47,7 +47,12 @@ class Epreuve
     /**
      * @ORM\ManyToOne(targetEntity=classe::class, inversedBy="epreuves")
      */
-    private $class_id;
+    private $classe;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Matiere::class, inversedBy="epreuves")
+     */
+    private $matiere;
 
     public function __construct()
     {
@@ -71,24 +76,24 @@ class Epreuve
         return $this;
     }
 
-    public function getHeurDebut(): ?\DateTimeInterface
+    public function getHeureDebut(): ?\DateTimeInterface
     {
         return $this->heurDebut;
     }
 
-    public function setHeurDebut(?\DateTimeInterface $heurDebut): self
+    public function setHeureDebut(?\DateTimeInterface $heurDebut): self
     {
         $this->heurDebut = $heurDebut;
 
         return $this;
     }
 
-    public function getHeurFin(): ?\DateTimeInterface
+    public function getHeureFin(): ?\DateTimeInterface
     {
         return $this->heurFin;
     }
 
-    public function setHeurFin(?\DateTimeInterface $heurFin): self
+    public function setHeureFin(?\DateTimeInterface $heurFin): self
     {
         $this->heurFin = $heurFin;
 
@@ -137,14 +142,26 @@ class Epreuve
         return $this;
     }
 
-    public function getClassId(): ?classe
+    public function getClasse(): ?classe
     {
-        return $this->class_id;
+        return $this->classe;
     }
 
-    public function setClassId(?classe $class_id): self
+    public function setClasse(?classe $classe): self
     {
-        $this->class_id = $class_id;
+        $this->classe = $classe;
+
+        return $this;
+    }
+
+    public function getMatiere(): ?Matieres
+    {
+        return $this->matiere;
+    }
+
+    public function setMatiere(?Matieres $matiere): self
+    {
+        $this->matiere = $matiere;
 
         return $this;
     }

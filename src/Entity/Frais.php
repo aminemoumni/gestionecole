@@ -25,7 +25,7 @@ class Frais
     /**
      * @ORM\OneToOne(targetEntity=classe::class, inversedBy="frais", cascade={"persist", "remove"})
      */
-    private $class_id;
+    private $classe;
 
     public function getId(): ?int
     {
@@ -44,14 +44,14 @@ class Frais
         return $this;
     }
 
-    public function getClassId(): ?classe
+    public function getClasse(): ?classe
     {
-        return $this->class_id;
+        return $this->classe;
     }
 
-    public function setClassId(?classe $class_id): self
+    public function setClasse(?classe $classe): self
     {
-        $this->class_id = $class_id;
+        $this->classe = $classe;
 
         return $this;
     }

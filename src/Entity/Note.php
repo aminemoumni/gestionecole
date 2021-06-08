@@ -30,7 +30,7 @@ class Note
     /**
      * @ORM\ManyToOne(targetEntity=Etudiant::class, inversedBy="notes")
      */
-    private $etudiant_id;
+    private $etudiant;
 
     public function getId(): ?int
     {
@@ -61,14 +61,14 @@ class Note
         return $this;
     }
 
-    public function getEtudiantId(): ?Etudiant
+    public function getEtudiant(): ?Etudiant
     {
-        return $this->etudiant_id;
+        return $this->etudiant;
     }
 
-    public function setEtudiantId(?Etudiant $etudiant_id): self
+    public function setEtudiant(?Etudiant $etudiant): self
     {
-        $this->etudiant_id = $etudiant_id;
+        $this->etudiant = $etudiant;
 
         return $this;
     }

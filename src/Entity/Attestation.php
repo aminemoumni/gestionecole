@@ -28,7 +28,7 @@ class Attestation
     /**
      * @ORM\ManyToOne(targetEntity=etudiant::class, inversedBy="attestations")
      */
-    private $etudiant_id;
+    private $etudiant;
 
     public function getId(): ?int
     {
@@ -49,14 +49,14 @@ class Attestation
         return $this;
     }
 
-    public function getEtudiantId(): ?etudiant
+    public function getEtudiant(): ?etudiant
     {
-        return $this->etudiant_id;
+        return $this->etudiant;
     }
 
-    public function setEtudiantId(?etudiant $etudiant_id): self
+    public function setEtudiant(?etudiant $etudiant): self
     {
-        $this->etudiant_id = $etudiant_id;
+        $this->etudiant = $etudiant;
 
         return $this;
     }

@@ -40,7 +40,12 @@ class Cours
     /**
      * @ORM\ManyToOne(targetEntity=classe::class, inversedBy="cours")
      */
-    private $class_id;
+    private $classe;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Matiere::class, inversedBy="cours")
+     */
+    private $matiere;
 
     public function getId(): ?int
     {
@@ -95,14 +100,26 @@ class Cours
         return $this;
     }
 
-    public function getClassId(): ?classe
+    public function getClasse(): ?classe
     {
-        return $this->class_id;
+        return $this->classe;
     }
 
-    public function setClassId(?classe $class_id): self
+    public function setClasse(?classe $classe): self
     {
-        $this->class_id = $class_id;
+        $this->classe = $classe;
+
+        return $this;
+    }
+
+    public function getMatiere(): ?Matieres
+    {
+        return $this->matiere;
+    }
+
+    public function setMatiere(?Matieres $matiere): self
+    {
+        $this->matiere = $matiere;
 
         return $this;
     }

@@ -80,7 +80,7 @@ class Inscription
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $fonctionMer;
+    private $fonctionMere;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -90,7 +90,12 @@ class Inscription
     /**
      * @ORM\ManyToOne(targetEntity=classe::class, inversedBy="inscriptions")
      */
-    private $class_id;
+    private $classe;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="inscription")
+     */
+    private $user;
 
     public function getId(): ?int
     {
@@ -241,12 +246,12 @@ class Inscription
         return $this;
     }
 
-    public function getFonctionMer(): ?string
+    public function getFonctionMere(): ?string
     {
         return $this->fonctionMer;
     }
 
-    public function setFonctionMer(?string $fonctionMer): self
+    public function setFonctionMere(?string $fonctionMer): self
     {
         $this->fonctionMer = $fonctionMer;
 
@@ -265,14 +270,26 @@ class Inscription
         return $this;
     }
 
-    public function getClassId(): ?classe
+    public function getClasse(): ?classe
     {
-        return $this->class_id;
+        return $this->classe;
     }
 
-    public function setClassId(?classe $class_id): self
+    public function setClasse(?classe $classe): self
     {
-        $this->class_id = $class_id;
+        $this->classe = $classe;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }

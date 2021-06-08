@@ -25,27 +25,27 @@ class Classe
     private $designation;
 
     /**
-     * @ORM\OneToMany(targetEntity=Cours::class, mappedBy="class_id")
+     * @ORM\OneToMany(targetEntity=Cours::class, mappedBy="classe")
      */
     private $cours;
 
     /**
-     * @ORM\OneToOne(targetEntity=Frais::class, mappedBy="class_id", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=Frais::class, mappedBy="classe", cascade={"persist", "remove"})
      */
     private $frais;
 
     /**
-     * @ORM\OneToMany(targetEntity=Inscription::class, mappedBy="class_id")
+     * @ORM\OneToMany(targetEntity=Inscription::class, mappedBy="classe")
      */
     private $inscriptions;
 
     /**
-     * @ORM\OneToMany(targetEntity=Etudiant::class, mappedBy="class_id")
+     * @ORM\OneToMany(targetEntity=Etudiant::class, mappedBy="classe")
      */
     private $etudiants;
 
     /**
-     * @ORM\OneToMany(targetEntity=Epreuve::class, mappedBy="class_id")
+     * @ORM\OneToMany(targetEntity=Epreuve::class, mappedBy="classe")
      */
     private $epreuves;
 
@@ -113,12 +113,12 @@ class Classe
     {
         // unset the owning side of the relation if necessary
         if ($frais === null && $this->frais !== null) {
-            $this->frais->setClassId(null);
+            $this->frais->setClasse(null);
         }
 
         // set the owning side of the relation if necessary
-        if ($frais !== null && $frais->getClassId() !== $this) {
-            $frais->setClassId($this);
+        if ($frais !== null && $frais->getClasse() !== $this) {
+            $frais->setClasse($this);
         }
 
         $this->frais = $frais;
@@ -138,7 +138,7 @@ class Classe
     {
         if (!$this->inscriptions->contains($inscription)) {
             $this->inscriptions[] = $inscription;
-            $inscription->setClassId($this);
+            $inscription->setClasse($this);
         }
 
         return $this;
@@ -148,8 +148,8 @@ class Classe
     {
         if ($this->inscriptions->removeElement($inscription)) {
             // set the owning side to null (unless already changed)
-            if ($inscription->getClassId() === $this) {
-                $inscription->setClassId(null);
+            if ($inscription->getClasse() === $this) {
+                $inscription->setClasse(null);
             }
         }
 
@@ -168,7 +168,7 @@ class Classe
     {
         if (!$this->etudiants->contains($etudiant)) {
             $this->etudiants[] = $etudiant;
-            $etudiant->setClassId($this);
+            $etudiant->setClasse($this);
         }
 
         return $this;
@@ -178,8 +178,8 @@ class Classe
     {
         if ($this->etudiants->removeElement($etudiant)) {
             // set the owning side to null (unless already changed)
-            if ($etudiant->getClassId() === $this) {
-                $etudiant->setClassId(null);
+            if ($etudiant->getClasse() === $this) {
+                $etudiant->setClasse(null);
             }
         }
 
@@ -194,22 +194,22 @@ class Classe
         return $this->epreuves;
     }
 
-    public function addEpreufe(Epreuve $epreufe): self
+    public function addEpreuve(Epreuve $epreufe): self
     {
         if (!$this->epreuves->contains($epreufe)) {
             $this->epreuves[] = $epreufe;
-            $epreufe->setClassId($this);
+            $epreufe->setClasse($this);
         }
 
         return $this;
     }
 
-    public function removeEpreufe(Epreuve $epreufe): self
+    public function removeEpreuve(Epreuve $epreufe): self
     {
         if ($this->epreuves->removeElement($epreufe)) {
             // set the owning side to null (unless already changed)
-            if ($epreufe->getClassId() === $this) {
-                $epreufe->setClassId(null);
+            if ($epreufe->getClasse() === $this) {
+                $epreufe->setClasse(null);
             }
         }
 

@@ -42,17 +42,27 @@ class Etudiant
     /**
      * @ORM\ManyToOne(targetEntity=classe::class, inversedBy="etudiants")
      */
-    private $class_id;
+    private $classe;
 
     /**
-     * @ORM\OneToMany(targetEntity=Note::class, mappedBy="etudiant_id")
+     * @ORM\OneToMany(targetEntity=Note::class, mappedBy="etudiant")
      */
     private $notes;
 
     /**
-     * @ORM\OneToMany(targetEntity=Attestation::class, mappedBy="etudiant_id")
+     * @ORM\OneToMany(targetEntity=Attestation::class, mappedBy="etudiant")
      */
     private $attestations;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $codeAdmission;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="etudiant")
+     */
+    private $user;
 
     public function __construct()
     {
@@ -113,14 +123,14 @@ class Etudiant
         return $this;
     }
 
-    public function getClassId(): ?classe
+    public function getClasse(): ?classe
     {
-        return $this->class_id;
+        return $this->classe;
     }
 
-    public function setClassId(?classe $class_id): self
+    public function setClasse(?classe $classe): self
     {
-        $this->class_id = $class_id;
+        $this->classe = $classe;
 
         return $this;
     }
@@ -137,7 +147,7 @@ class Etudiant
     {
         if (!$this->notes->contains($note)) {
             $this->notes[] = $note;
-            $note->setEtudiantId($this);
+            $note->setEtudiant($this);
         }
 
         return $this;
@@ -147,8 +157,8 @@ class Etudiant
     {
         if ($this->notes->removeElement($note)) {
             // set the owning side to null (unless already changed)
-            if ($note->getEtudiantId() === $this) {
-                $note->setEtudiantId(null);
+            if ($note->getEtudiant() === $this) {
+                $note->setEtudiant(null);
             }
         }
 
@@ -167,7 +177,7 @@ class Etudiant
     {
         if (!$this->attestations->contains($attestation)) {
             $this->attestations[] = $attestation;
-            $attestation->setEtudiantId($this);
+            $attestation->setEtudiant($this);
         }
 
         return $this;
@@ -177,10 +187,34 @@ class Etudiant
     {
         if ($this->attestations->removeElement($attestation)) {
             // set the owning side to null (unless already changed)
-            if ($attestation->getEtudiantId() === $this) {
-                $attestation->setEtudiantId(null);
+            if ($attestation->getEtudiant() === $this) {
+                $attestation->setEtudiant(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCodeAdmission(): ?string
+    {
+        return $this->codeAdmission;
+    }
+
+    public function setCodeAdmission(string $codeAdmission): self
+    {
+        $this->codeAdmission = $codeAdmission;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }
