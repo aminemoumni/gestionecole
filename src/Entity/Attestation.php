@@ -26,7 +26,7 @@ class Attestation
     private $dateCreated;
 
     /**
-     * @ORM\ManyToOne(targetEntity=etudiant::class, inversedBy="attestations")
+     * @ORM\ManyToOne(targetEntity=Etudiant::class, inversedBy="attestations")
      */
     private $etudiant;
 
