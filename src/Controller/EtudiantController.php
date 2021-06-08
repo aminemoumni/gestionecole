@@ -16,6 +16,13 @@ class EtudiantController extends AbstractController
     */
     public function index(): Response
     {
-        return $this->render('etudiant/index.html.twig');
+       return $this->render('etudiant/index.html.twig');
+    }
+    /**
+    * @Route("/new", name="etudiant_new")
+    */
+    public function new(): Response
+    {
+        return $this->render('etudiant/new.html.twig');
     }
 }
