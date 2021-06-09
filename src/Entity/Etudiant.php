@@ -64,10 +64,16 @@ class Etudiant
      */
     private $user;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Inscription::class, mappedBy="etudiant")
+     */
+    private $inscriptions;
+
     public function __construct()
     {
         $this->notes = new ArrayCollection();
         $this->attestations = new ArrayCollection();
+        $this->inscriptions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -215,6 +221,36 @@ class Etudiant
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Inscription[]
+     */
+    public function getInscriptions(): Collection
+    {
+        return $this->inscriptions;
+    }
+
+    public function addInscription(Inscription $inscription): self
+    {
+        if (!$this->inscriptions->contains($inscription)) {
+            $this->inscriptions[] = $inscription;
+            $inscription->setEtudiant($this);
+        }
+
+        return $this;
+    }
+
+    public function removeInscription(Inscription $inscription): self
+    {
+        if ($this->inscriptions->removeElement($inscription)) {
+            // set the owning side to null (unless already changed)
+            if ($inscription->getEtudiant() === $this) {
+                $inscription->setEtudiant(null);
+            }
+        }
 
         return $this;
     }

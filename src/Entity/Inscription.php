@@ -97,6 +97,25 @@ class Inscription
      */
     private $user;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Etudiant::class, inversedBy="inscriptions")
+     */
+    private $etudiant;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $valide;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $created;
+
+    public function __construct()
+    {
+        $this->created= new \DateTime();
+    }
     public function getId(): ?int
     {
         return $this->id;
@@ -248,12 +267,12 @@ class Inscription
 
     public function getFonctionMere(): ?string
     {
-        return $this->fonctionMer;
+        return $this->fonctionMere;
     }
 
-    public function setFonctionMere(?string $fonctionMer): self
+    public function setFonctionMere(?string $fonctionMere): self
     {
-        $this->fonctionMer = $fonctionMer;
+        $this->fonctionMere = $fonctionMere;
 
         return $this;
     }
@@ -290,6 +309,42 @@ class Inscription
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getEtudiant(): ?Etudiant
+    {
+        return $this->etudiant;
+    }
+
+    public function setEtudiant(?Etudiant $etudiant): self
+    {
+        $this->etudiant = $etudiant;
+
+        return $this;
+    }
+
+    public function getValide(): ?bool
+    {
+        return $this->valide;
+    }
+
+    public function setValide(?bool $valide): self
+    {
+        $this->valide = $valide;
+
+        return $this;
+    }
+
+    public function getCreated(): ?\DateTimeInterface
+    {
+        return $this->created;
+    }
+
+    public function setCreated(\DateTimeInterface $created): self
+    {
+        $this->created = $created;
 
         return $this;
     }

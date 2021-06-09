@@ -32,7 +32,11 @@
                                 <a href="{{path('etudiant_new')}}"><span class="fas fa-user-lock"></span><span>Ajouter etudiant</span></a>
                             </li>
                             <li>
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <a href="{{path('admin_etudiant_index')}}"><span class="fas fa-school"></span><span>List etudiant</span></a>
+                            {% else %}
                                 <a href="{{path('etudiant_index')}}"><span class="fas fa-school"></span><span>List etudiant</span></a>
+                            {% endif %}
                             </li>
                         </ul>
                     </li>
@@ -93,7 +97,7 @@
 
                             <ul>
                                 <li><a href="#">Profile</a></li>
-                                <li><a href="#">Logout</a></li>
+                                <li><a href="{{path('app_logout')}}">Logout</a></li>
                             </ul>
                         </div>
                     </div>

@@ -1,12 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Aouter un etudiant{% endblock %}
+{% block title %}Ajouter un etudiant{% endblock %}
 
 {% block body %}
 <div class="main">
   <div class="container bg-color ">
       <h3 class="">Ajouter un nouveau etudiant</h3>
-      <form>
+      <form method="POST" action="store">
           <div class="row " >
               <div class="col-md-6">
                 <label for="nom" class="form-label">Nom</label>
@@ -19,11 +19,11 @@
             
           </div>
           <div class="row " >
-            <div class="col-md-6">
+            <div class="col-md-4">
               <label for="dateNaissance" class="form-label">Date naissance</label>
               <input type="date" name="dateNaissance" class="form-control" id="dateNaissance">
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
               <label for="ville" class="form-label">Ville</label>
               <select type="text" name="ville" class="form-select" id="ville">
                 <option selected>Selection une region</option>
@@ -43,6 +43,15 @@
                 <option value="Taza-Al Hoceima-Taounate">Taza-Al Hoceima-Taounate</option>
               </select>
             </div>
+            <div class="col-md-4">
+              <label for="classe" class="form-label">Classe</label>
+              <select type="text" name="classe" class="form-select" id="classe">
+                <option selected>Choisir une classe</option>
+                {% for classe in classes %}
+                <option value="{{classe.id}}">{{classe.designation}}</option>
+                {% endfor %}
+              </select>
+            </div>
           </div>
           <div class="row " >
             <div class="col-md-6">
@@ -60,8 +69,8 @@
               <input type="text" name="emailP" class="form-control" id="emailP">
             </div>
             <div class="col-md-4">
-              <label for="fontctionP" class="form-label">Fonction pére</label>
-              <input type="text" name="fontctionP" class="form-control" id="fontctionP">
+              <label for="fonctionP" class="form-label">Fonction pére</label>
+              <input type="text" name="fonctionP" class="form-control" id="fonctionP">
             </div>
             <div class="col-md-4">
               <label for="telephoneP" class="form-label">Telephone pére</label>
@@ -72,11 +81,11 @@
           <div class="row " >
             <div class="col-md-6">
               <label for="nomM" class="form-label">Nom mére</label>
-              <input type="text" name="nomP" class="form-control" id="nomM">
+              <input type="text" name="nomM" class="form-control" id="nomM">
             </div>
             <div class="col-md-6">
               <label for="prenomM" class="form-label">Prenom mére</label>
-              <input type="text" name="prenomM" class="form-control" id="prenoM">
+              <input type="text" name="prenomM" class="form-control" id="prenomM">
             </div>
           </div>
           <div class="row " >
@@ -85,8 +94,8 @@
               <input type="text" name="emailM" class="form-control" id="emailM">
             </div>
             <div class="col-md-4">
-              <label for="fontctionM" class="form-label">Fonction mére</label>
-              <input type="text" name="fontctionM" class="form-control" id="fontctionM">
+              <label for="fonctionM" class="form-label">Fonction mére</label>
+              <input type="text" name="fonctionM" class="form-control" id="fonctionM">
             </div>
             <div class="col-md-4">
               <label for="telephoneM" class="form-label">Telephone mére</label>

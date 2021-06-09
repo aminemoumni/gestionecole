@@ -1,0 +1,71 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}LISTES ETUDIANTS{% endblock %}
+
+{% block body %}
+
+<div class="container " style="font-size: 1.4rem;">
+  <div class="row">
+    <div class="col-md-12">
+      <h3>Listes etudiants :</h3>
+      <div class="table-responsive">
+
+
+        <table id="mytable" class="table table-bordred table-striped">
+
+          <thead>
+
+
+            <th>Nom</th>
+            <th>Prenom</th>
+            <th>Date naissance</th>
+            <th>Ville</th>
+            <th>Classe</th>
+            <th>Action</th>
+
+          </thead>
+          <tbody>
+
+
+            {% for inscription in inscriptions %}
+            <tr>
+              <td>{{inscription.nom}}</td>
+              <td>{{inscription.prenom}}</td>
+              <td>{{inscription.dateNaiss|date("Y-m-d")}}</td>
+              <td>{{inscription.ville}}</td>
+              <td>{{inscription.classe.designation}}</td>
+              <td>
+                {% if inscription.etudiant %}
+                <a class="btn btn-primary btn-xs">Attestation scolaire</a>
+                <a class="btn btn-primary btn-xs">Annuler l'année</a>
+                {% else %}
+                <p> En attend de validation par l'ecole</p>
+                {% endif %}
+              </td>
+
+
+            </tr>
+            {% endfor %}
+
+
+
+
+
+          </tbody>
+
+        </table>
+
+
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+{% endblock %}
