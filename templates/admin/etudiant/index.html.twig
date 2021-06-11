@@ -3,5 +3,43 @@
 {% block title %}Hello EtudiantController!{% endblock %}
 
 {% block body %}
-    <h1>It works</h1>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+                <select id="selectClasseInscription" class="form-select" data-column ='0'>
+                    <option value="">Sélectionnez classe...</option>
+                    {% for classe in classes %}
+                    <option value="{{classe.id}}">{{classe.designation}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <table id="listOfInscription" cellspacing="0" class="table table-bordered table-striped grid" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Nom</th>
+                    <th>Prenom</th>
+                    <th>Region</th>
+                    <th>Age</th>
+                    <th>Class</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+            
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>Id</th>
+                    <th>Nom</th>
+                    <th>Prenom</th>
+                    <th>Region</th>
+                    <th>Age</th>
+                    <th>Class</th>
+                    <th>Action</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
 {% endblock %}

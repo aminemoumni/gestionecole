@@ -10,6 +10,7 @@ import './styles/app.scss';
 import './styles/app.css';
 import './styles/login.css';
 import './styles/etudiant.css';
+// import './styles/datatable.bootstrap5.min.css'
 
 // start the Stimulus application
 import './bootstrap';
@@ -18,9 +19,11 @@ const $ = require('jquery');
 //const swal = require('sweetalert2');
 global.$ = $;
 require('bootstrap');
+const dt = require( 'datatables.net');
 // require("bootstrap/dist/js/bootstrap");
 
 import './login'
 import './admin'
+import './inscription'
 
 
