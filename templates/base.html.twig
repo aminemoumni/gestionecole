@@ -28,9 +28,11 @@
                     <li  class="li">
                         <a class="li__a"><span class="fas fa-users"></span><span>Etudiant</span> <i class="bi bi-caret-down-fill activeRotate"></i></a>
                         <ul style="display: block;">
+                            {% if is_granted('ROLE_ADMIN') == false  %}
                             <li>
                                 <a href="{{path('etudiant_new')}}"><span class="fas fa-user-lock"></span><span>Ajouter etudiant</span></a>
                             </li>
+                            {% endif %}
                             <li>
                             {% if is_granted('ROLE_ADMIN') %}
                                 <a href="{{path('admin_etudiant_index')}}"><span class="fas fa-school"></span><span>List etudiant</span></a>
@@ -41,13 +43,17 @@
                         </ul>
                     </li>
                     <li  class="li">
-                        <a class="li__a"><span class="fas fa-users"></span><span>Users</span> <i class="bi bi-caret-down-fill"></i></a>
+                        <a class="li__a"><span class="fas fa-users"></span><span>Classe</span> <i class="bi bi-caret-down-fill"></i></a>
                         <ul>
                             <li>
-                                <a href=""><span class="fas fa-user-lock"></span><span>Admins</span></a>
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <a href="{{path('admin_classe')}}"><span class="fas fa-user-lock"></span><span>Etudiant</span></a>
+                            {% endif %}
                             </li>
                             <li>
-                                <a href=""><span class="fas fa-school"></span><span>Students</span></a>
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <a href="{{path('admin_classe_classeProfesseur')}}"><span class="fas fa-school"></span><span>Professeur</span></a>
+                            {% endif %}
                             </li>
                         </ul>
                     </li>

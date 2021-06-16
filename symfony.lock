@@ -100,11 +100,17 @@
     "monolog/monolog": {
         "version": "2.2.0"
     },
+    "mpdf/mpdf": {
+        "version": "v8.0.11"
+    },
     "myclabs/deep-copy": {
         "version": "1.10.2"
     },
     "nikic/php-parser": {
         "version": "v4.10.5"
+    },
+    "paragonie/random_compat": {
+        "version": "v9.99.100"
     },
     "phar-io/manifest": {
         "version": "2.0.1"
@@ -230,6 +236,9 @@
         "files": [
             "./config/packages/sensio_framework_extra.yaml"
         ]
+    },
+    "setasign/fpdi": {
+        "version": "v2.3.6"
     },
     "symfony/asset": {
         "version": "v5.3.0"

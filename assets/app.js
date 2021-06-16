@@ -20,10 +20,15 @@ const $ = require('jquery');
 global.$ = $;
 require('bootstrap');
 const dt = require( 'datatables.net');
+// const Swal = require('sweetalert2/dist/sweetalert2.js');
+const Swal = require('sweetalert2');
+window.Swal = Swal;
+// const Swal = require('sweetalert2')
 // require("bootstrap/dist/js/bootstrap");
 
 import './login'
 import './admin'
 import './inscription'
+import './classeEtudiant'
 
 

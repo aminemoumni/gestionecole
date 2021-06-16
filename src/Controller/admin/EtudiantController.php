@@ -5,6 +5,7 @@ namespace App\Controller\admin;
 use App\Entity\Classe;
 use App\Entity\Etudiant;
 use App\Entity\Inscription;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use App\Controller\admin\DatatablesController;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,6 +19,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
  */
 class EtudiantController extends AbstractController
 {
+
+    public function __construct(EntityManagerInterface $manager)
+    {
+        $this->em = $manager;
+    }
     /**
      * @Route("/", name="admin_etudiant_index")
      */
@@ -36,6 +42,7 @@ class EtudiantController extends AbstractController
      */
     public function list(Request $request): Response
     {
+       
         $em = $this->getDoctrine()->getManager();
         $params = $request->query;
         // dd($params);
@@ -94,18 +101,16 @@ class EtudiantController extends AbstractController
             $nestedData = array();
             $cd = $row['id'];
             // $question_edit = $this->generateUrl('question_edit', ['id' => $row['id']]);
-            $inscription_valider = $this->generateUrl('admin_inscription_valider', ['id' => $row['id']]);
-            $inscription_annuler = $this->generateUrl('admin_inscription_annuler', ['id' => $row['id']]);
-            $etudiant = $em->getRepository(Inscription::class)->findBy([
-                'etudiant' => $row['id']
-            ]);
-            if($etudiant) {
+            $inscription_valider = $this->generateUrl('admin_inscription_valider', ['inscription' => $row['id']]);
+            $inscription_annuler = $this->generateUrl('admin_inscription_annuler', ['inscription' => $row['id']]);
+            $inscriptionEtudiant = $em->getRepository(Inscription::class)->find($row['id']);
+            if($inscriptionEtudiant->getEtudiant() and $inscriptionEtudiant->getValide() == 1) {
                 $actions = "<div class='actions'>"
-                . " <a href='$inscription_annuler' class='btn btn-danger'>Anuller l'année</a>"
+                . " <a href='$inscription_annuler' class='btn btn-danger'>Annuler l'année</a>"
                 . "</div>";
             } else {
                 $actions = "<div class='actions'>"
-                . " <a href='$inscription_valider' class='btn btn-warning'>Valider</a>"
+                . " <a href='$inscription_valider' class='btn btn-success'>Valider</a>"
                 . "</div>";
             }
             foreach (array_values($row) as $key => $value) {
@@ -124,22 +129,49 @@ class EtudiantController extends AbstractController
             "recordsFiltered" => intval($totalRecords),
             "data" => $data   // total data array
         );
-
+        // die;
         return new Response(json_encode($json_data));
-         
+        
     }
     /**
-     * @Route("/admin_inscription_valider", name="admin_inscription_valider")
+     * @Route("/admin_inscription_valider/{inscription}", name="admin_inscription_valider")
      */
-    public function adminInscriptionValider(): Response
-    {
-        return new Response('admin_inscription_valider');
+    public function adminInscriptionValider(Request $request,Inscription $inscription): Response
+    {      
+        $etudiant=new Etudiant();
+        $classe=$inscription->getClasse()->getId();
+        $etudiant->setNom($inscription->getNom());
+        $etudiant->setPrenom($inscription->getPrenom());
+        $etudiant->setDateNaiss($inscription->getDateNaiss());
+        $etudiant->setVille($inscription->getVille());
+        // $etudiant->setClasse($inscription->getClasse());
+        $etudiant->setUser($this->getUser());
+        $etudiant->setCodeAdmission('1');
+        // dd($inscription->getClasse());
+        //dd($etudiant);
+        
+        $this->em->persist($etudiant);
+        $inscription->setValide(1);
+        $inscription->setEtudiant($etudiant);
+        
+        $this->em->flush();
+        
+        
+        
+        return $this->redirectToRoute('admin_etudiant_index');
+        // return new Response('admin_inscription_valider');
     }
     /**
-     * @Route("/admin_inscription_annuler", name="admin_inscription_annuler")
+     * @Route("/admin_inscription_annuler/{inscription}", name="admin_inscription_annuler")
      */
-    public function adminInscriptionAnnuler(): Response
+    public function adminInscriptionAnnuler(Inscription $inscription): Response
     {
-        return new Response('admin_inscription_annuler');
+        // $inscription = $em->getRepository(Inscription::class)->find($id);
+        
+        $inscription->setValide(0);
+        $this->em->persist($inscription);
+        $this->em->flush();
+        return $this->redirectToRoute('admin_etudiant_index');
+        // return new Response('admin_inscription_annuler');
     }
 }

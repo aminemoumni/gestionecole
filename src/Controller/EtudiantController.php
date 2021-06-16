@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Mpdf\Mpdf;
 use App\Entity\Classe;
 use App\Entity\Inscription;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,6 +25,8 @@ class EtudiantController extends AbstractController
         $entityManager = $this->getDoctrine()->getManager();
         $user=$this->getUser();
         $inscriptions=$entityManager->getRepository(Inscription::class)->findBy(['user'=>$user]);
+
+        
        return $this->render('etudiant/index.html.twig',['inscriptions'=>$inscriptions,]);
     }
     /**
@@ -68,5 +71,20 @@ class EtudiantController extends AbstractController
         // die;
         return $this->redirectToRoute('etudiant_new');
 
+    }
+     /**
+    * @Route("/attestation/{inscription}", name="etudiant_attestation")
+    */
+    public function attestation(Request $request,Inscription $inscription)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $mpdf= new Mpdf();
+        $html = $this->renderView('etudiant/attestation.html.twig', [
+            'title' => "Attestation scolaire" ,'inscription' =>$inscription
+        ]);
+       
+        $mpdf->WriteHtml($html);
+        $mpdf->Output('Myfile.pdf','D');
+        return new Response('The PDF file has been succesfully generated !');
     }
 }
