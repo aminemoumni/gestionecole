@@ -49,12 +49,18 @@ class Classe
      */
     private $epreuves;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Professeur::class, mappedBy="classe")
+     */
+    private $professeurs;
+
     public function __construct()
     {
         $this->cours = new ArrayCollection();
         $this->inscriptions = new ArrayCollection();
         $this->etudiants = new ArrayCollection();
         $this->epreuves = new ArrayCollection();
+        $this->professeurs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -211,6 +217,33 @@ class Classe
             if ($epreufe->getClasse() === $this) {
                 $epreufe->setClasse(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Professeur[]
+     */
+    public function getProfesseurs(): Collection
+    {
+        return $this->professeurs;
+    }
+
+    public function addProfesseur(Professeur $professeur): self
+    {
+        if (!$this->professeurs->contains($professeur)) {
+            $this->professeurs[] = $professeur;
+            $professeur->addClasse($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProfesseur(Professeur $professeur): self
+    {
+        if ($this->professeurs->removeElement($professeur)) {
+            $professeur->removeClasse($this);
         }
 
         return $this;

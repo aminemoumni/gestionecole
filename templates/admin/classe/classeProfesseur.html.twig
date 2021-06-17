@@ -4,7 +4,7 @@
 
 {% block body %}
 <div class="container">
-        <table id="listOfProffesseur" cellspacing="0" class="table table-bordered table-striped grid" style="width:100%">
+        <table id="listOfProfesseur" cellspacing="0" class="table table-bordered table-striped grid" style="width:100%">
             <thead>
                 <tr>
                     <th>Id</th>
@@ -31,5 +31,41 @@
                 </tr>
             </tfoot>
         </table>
+</div>
+<div class="overlayOuvrage" ></div>
+<div class="popOuvrage" >
+    <div class="loadingScreen"><i class="fa fa-spinner fa-spin"></i></div>
+    <i class="fa fa-times xOuvrage"></i>
+    <div class="form-group">
+        <label class="col-md-3 control-label required" for="appbundle_theme_discipline" style="font-weight: bold">Etablissement (*)</label>
+        <div class="col-md-9">
+            <select id="selectEtablissement" name="" class="form-control input-sm ">
+                <div style="height: 200px; overflow-y: scroll ">
+                <option>Choisir une etablissement</option>
+                
+                </div>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-3 control-label required" for="appbundle_theme_discipline" style="font-weight: bold">Formation (*)</label>
+        <div class="col-md-9">
+            <select id="selectFormation" name="" class="form-control input-sm ">
+                
+            </select>
+        </div>
+    </div>
+    <table style="margin-top: 2rem;" class="table table-bordered">
+  <thead>
+    <tr>
+      <th scope="col" style="background-color: #333; color: white;">Etablissement</th>
+      <th scope="col" style="background-color: #333;color: white;">Formation</th>
+      <th scope="col" style="background-color: #333;color: white;">Action</th>
+    </tr>
+  </thead>
+  <tbody id="tbodyAffectation">
+    
+  </tbody>
+</table>
 </div>
 {% endblock %}

@@ -34,7 +34,8 @@ class EtudiantController extends AbstractController
         $inscriptions = $em->getRepository(Inscription::class)->findAll();
         return $this->render('admin/etudiant/index.html.twig', [
             'inscriptions' => $inscriptions,
-            'classes' => $classes
+            'classes' => $classes,
+            'li' => 'etudiant'
         ]);
     }
     /**

@@ -13,6 +13,7 @@
         {% endblock %}
 
         {% block javascripts %}
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
             {{ encore_entry_script_tags('app') }}
             {# {{ encore_entry_script_tags('amine') }} #}
         {% endblock %}
@@ -26,8 +27,8 @@
             <div class="sidebar__body">
                 <ul class="ul">
                     <li  class="li">
-                        <a class="li__a"><span class="fas fa-users"></span><span>Etudiant</span> <i class="bi bi-caret-down-fill activeRotate"></i></a>
-                        <ul style="display: block;">
+                        <a class="li__a"><span class="fas fa-users"></span><span>Etudiant</span> <i class="bi bi-caret-down-fill {% if li == "etudiant" %}    activeRotate {% endif %}"></i></a>
+                        <ul {% if li == 'etudiant' %}  style="display: block;" {% endif %}>
                             {% if is_granted('ROLE_ADMIN') == false  %}
                             <li>
                                 <a href="{{path('etudiant_new')}}"><span class="fas fa-user-lock"></span><span>Ajouter etudiant</span></a>
@@ -43,8 +44,8 @@
                         </ul>
                     </li>
                     <li  class="li">
-                        <a class="li__a"><span class="fas fa-users"></span><span>Classe</span> <i class="bi bi-caret-down-fill"></i></a>
-                        <ul>
+                        <a class="li__a"><span class="fas fa-users"></span><span>Classe</span> <i class="bi bi-caret-down-fill {% if li == 'classe' %} activeRotate {% endif %}"></i></a>
+                        <ul {% if li == 'classe' %}  style="display: block;" {% endif %}>
                             <li>
                             {% if is_granted('ROLE_ADMIN') %}
                                 <a href="{{path('admin_classe')}}"><span class="fas fa-user-lock"></span><span>Etudiant</span></a>
@@ -52,7 +53,7 @@
                             </li>
                             <li>
                             {% if is_granted('ROLE_ADMIN') %}
-                                <a href="{{path('admin_classe_classeProfesseur')}}"><span class="fas fa-school"></span><span>Professeur</span></a>
+                                <a href="{{path('admin_classeP')}}"><span class="fas fa-school"></span><span>Professeur</span></a>
                             {% endif %}
                             </li>
                         </ul>

@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ProfesseurRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -41,6 +43,16 @@ class Professeur
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $tel;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Classe::class, inversedBy="professeurs")
+     */
+    private $classe;
+
+    public function __construct()
+    {
+        $this->classe = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -103,6 +115,30 @@ class Professeur
     public function setTel(?string $tel): self
     {
         $this->tel = $tel;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Classe[]
+     */
+    public function getClasse(): Collection
+    {
+        return $this->classe;
+    }
+
+    public function addClasse(Classe $classe): self
+    {
+        if (!$this->classe->contains($classe)) {
+            $this->classe[] = $classe;
+        }
+
+        return $this;
+    }
+
+    public function removeClasse(Classe $classe): self
+    {
+        $this->classe->removeElement($classe);
 
         return $this;
     }
