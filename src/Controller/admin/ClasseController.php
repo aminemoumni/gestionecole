@@ -7,10 +7,14 @@ use App\Entity\Etudiant;
 use App\Entity\Professeur;
 use App\Entity\Inscription;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
@@ -18,9 +22,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
  */
 class ClasseController extends AbstractController
 {
-    public function __construct(EntityManagerInterface $manager)
+    public function __construct(EntityManagerInterface $manager, SerializerInterface $serializer)
     {
         $this->em = $manager;
+        $this->serializer = $serializer;
     }
     /**
      * @Route("/etudiant", name="admin_classe")
@@ -162,7 +167,6 @@ class ClasseController extends AbstractController
 
         $sql = "SELECT " . implode(", ", DatatablesController::Pluck($columns, 'db')) . "
         FROM professeur p
-        left join professeur_classe pc on p.id = pc.professeur_id
         $filtre";
 
         $totalRows .= $sql;
@@ -188,12 +192,12 @@ class ClasseController extends AbstractController
             
             $nestedData = array();
             $cd = $row['id'];
-            //$professeur = $this->em->getRepository(Professeur::class)->find($row['id']);
-            // if($professeur->getClasse()) {
+            
                 $actions = "<div class='actions'>"
                 . " <i class='bi bi-eye seeClass'  data-id='".$row['id']."'></i>"
+                . " <i class='bi bi-trash deleteProfesseur'  data-id='".$row['id']."'></i>"
                 . "</div>";
-            // } 
+            
 
             foreach (array_values($row) as $key => $value) {
                 $nestedData[] = $value;
@@ -254,15 +258,105 @@ class ClasseController extends AbstractController
     public function adminGetProfesseur(Request $request): Response
     {
         $idProfesseur = $request->request->get('id');
-        $classes = $this->em->getRepository(Classe::class)->findAll();
         $professeur = $this->em->getRepository(Professeur::class)->find($idProfesseur);
-        
-        // $message = "<p style='font-size:1.4rem'>Le professeur <span class='bold'> " . $etudiant->getNom() ." </span><span class='bold'> " . $etudiant->getPrenom() . "</span> à bien été supprimer dans la classe </p>";
-        $data = [
-            'classes' => $classes,
-            'professeur' => $professeur
-        ];
-        return  new JsonResponse($data);
-        
+        $sqlRequest = "Select * from classe where classe.id not in (select classe_id from professeur_classe where professeur_id = $idProfesseur)";
+        $stmt = $this->getDoctrine()->getManager()->getConnection()->prepare($sqlRequest);
+        $stmt->execute();
+        $classes = $stmt->fetchAll();
+        // dd($classes);
+        $html = $this->render('admin/classe/inc/popUp.html.twig', [
+            'professeur' => $professeur,
+            'classes' => $classes
+        ]);
+        // dd($html->getContent());
+        return new JsonResponse($html->getContent());
+
     }
+    /**
+     * @Route("/admin_set_class", name="admin_set_class")
+     */
+    public function adminSetClass(Request $request): Response
+    {
+        $idClasse = $request->request->get('idClasse');
+        //dd($idClasse);
+        $idProfesseur = $request->request->get('idProfesseur');
+        //dd($idProfesseur);
+        $professeur = $this->em->getRepository(Professeur::class)->find($idProfesseur);
+        $classe=$this->em->getRepository(Classe::class)->find($idClasse);
+        $professeur->addClasse($classe);
+        $this->em->flush();
+        $sqlRequest = "Select * from classe where classe.id not in (select classe_id from professeur_classe where professeur_id = $idProfesseur)";
+        $stmt = $this->getDoctrine()->getManager()->getConnection()->prepare($sqlRequest);
+        $stmt->execute();
+        $classes = $stmt->fetchAll();
+      
+        $html = $this->render('admin/classe/inc/popUp.html.twig', [
+            'professeur' => $professeur,
+            'classes' => $classes
+        ]);
+        
+        return new JsonResponse($html->getContent());
+
+    }
+    /**
+     * @Route("/admin_classProfesseur_annuler", name="admin_classProfesseur_annuler")
+     */
+    public function adminClasseAnnuler(Request $request): Response
+    {
+        
+        $idClasse = $request->request->get('idClasse');
+        $idProfesseur = $request->request->get('idProfesseur');
+        $professeur = $this->em->getRepository(Professeur::class)->find($idProfesseur);
+        $classe=$this->em->getRepository(Classe::class)->find($idClasse);
+        $professeur->removeClasse($classe);
+        $this->em->flush();
+
+        $sqlRequest = "Select * from classe where classe.id not in (select classe_id from professeur_classe where professeur_id = $idProfesseur)";
+        $stmt = $this->getDoctrine()->getManager()->getConnection()->prepare($sqlRequest);
+        $stmt->execute();
+        $classes = $stmt->fetchAll();
+      
+        $html = $this->render('admin/classe/inc/popUp.html.twig', [
+            'professeur' => $professeur,
+            'classes' => $classes
+        ]);
+        
+        return new JsonResponse($html->getContent());
+
+    }
+
+
+     /**
+     * @Route("/admin_delete_professeur", name="admin_delete_professeur")
+     */
+    public function adminDeleteProfesseur(Request $request): Response
+    {
+        
+        $idProfesseur = $request->request->get('id');
+       
+        $professeur = $this->em->getRepository(Professeur::class)->find($idProfesseur);
+        $message = "<p style='font-size:1.4rem'>Le proffesseur <span class='bold'> " . $professeur->getName() ." </span><span class='bold'> " . $professeur->getPrenom() ."</span> a été bien supprimé</p>";
+        $this->em->remove($professeur);
+        $this->em->flush();
+        
+        return new JsonResponse($message);
+
+    }
+
+
+    // public function serializeContent($myObject) 
+    // {
+    //     $encoders = [
+    //         new JsonEncoder()
+    //     ];
+    //     $normalizer = new ObjectNormalizer();
+    //     $normalizer->setCircularReferenceHandler(function ($object) {
+    //         return $object->getId();
+    //     });
+    //     $normalizers = [$normalizer];
+    //     $serializer  = new Serializer($normalizers, $encoders);
+
+    //     $data = $serializer->serialize($myObject, 'json');
+    //     return $data;
+    // }
 }

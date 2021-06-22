@@ -19,20 +19,84 @@ $(document).ready(function() {
 
     $('body').on('click', '.seeClass', function (e) {
         var id = $(this).attr('data-id');
-        // $('.overlayOuvrage, .popOuvrage').show()
+        $('.overlayOuvrage, .popOuvrage, .loadingScreen').show()
+
+        
         $.ajax({
             url: "/admin/classe/admin_get_professeur",
             type: 'post',
             data:{id:id},
             success: function (result) {
-                console.log(result)
+                $('.contentProfesseur').html(result)
+                $(".loadingScreen").hide()
             },
             error: function(error) {
                 console.log(error)
             }
         });
-        
+        $('body').on('click', '.addProfesseurClasse', function (e) {
+            
+            var idClasse = $('#selectEtablissement').val(); 
+            var idProfesseur = $(this).attr('data-idProfesseur'); 
+            //  alert(idProfesseur);
+            // alert(idClasse);
+             $.ajax({
+                url: "/admin/classe/admin_set_class",
+                type: 'post',
+                data:{idClasse:idClasse,idProfesseur:idProfesseur},
+                success: function (result) {
+                    $('.contentProfesseur').html(result)
+                },
+                error: function(error) {
+                    console.log(error)
+                }
+            });
+         
+        });  
+
+
+        $('body').on('click', '.desafecterProfesseur', function (e) {
+            
+            var idClasse = $(this).attr('data-idClasse');
+            var idProfesseur = $(this).attr('data-idprofesseur');
+            // alert(idProfesseur);
+            // alert(idClasse);
+             $.ajax({
+                url: "/admin/classe/admin_classProfesseur_annuler",
+                type: 'post',
+                data:{idClasse:idClasse,idProfesseur:idProfesseur},
+                success: function (result) {
+                    $('.contentProfesseur').html(result)
+                },
+                error: function(error) {
+                    console.log(error)
+                }
+            });
+         
+        }); 
      
+    });
+    $('body').on('click', '.deleteProfesseur', function (e) {
+        var id = $(this).attr('data-id');
+       
+
+        
+        $.ajax({
+            url: "/admin/classe/admin_delete_professeur",
+            type: 'post',
+            data:{id:id},
+            success: function (result) {
+                Swal.fire(
+                    'Suppression du professeur',
+                    result,
+                    'success'
+                )
+                table.ajax.reload()
+            },
+            error: function(error) {
+                console.log(error)
+            }
+        });
     });
 
 });

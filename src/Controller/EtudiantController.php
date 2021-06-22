@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use Mpdf\Mpdf;
 use App\Entity\Classe;
+use App\Entity\Etudiant;
+use App\Entity\Attestation;
 use App\Entity\Inscription;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,7 +29,10 @@ class EtudiantController extends AbstractController
         $inscriptions=$entityManager->getRepository(Inscription::class)->findBy(['user'=>$user]);
 
         
-       return $this->render('etudiant/index.html.twig',['inscriptions'=>$inscriptions,]);
+       return $this->render('etudiant/index.html.twig',[
+           'inscriptions'=>$inscriptions,
+           'li' => 'etudiant'
+        ]);
     }
     /**
     * @Route("/new", name="etudiant_new")
@@ -36,7 +41,10 @@ class EtudiantController extends AbstractController
     { 
         $entityManager = $this->getDoctrine()->getManager();
         $classes=$entityManager->getRepository(Classe::class)->findAll();
-        return $this->render('etudiant/new.html.twig',['classes'=>$classes,]);
+        return $this->render('etudiant/new.html.twig',[
+            'classes'=>$classes,
+            'li' => 'etudiant'
+        ]);
     }
 
       /**
@@ -78,6 +86,15 @@ class EtudiantController extends AbstractController
     public function attestation(Request $request,Inscription $inscription)
     {
         $em = $this->getDoctrine()->getManager();
+        $etudiant=$inscription->getEtudiant();
+        //dd($etudiant);
+        $attestation=new Attestation();
+        $attestation->setEtudiant($etudiant);
+        $attestation->setDateCreated(new \DateTime());
+        
+        $em->persist($attestation);
+        $em->flush();
+
         $mpdf= new Mpdf();
         $html = $this->renderView('etudiant/attestation.html.twig', [
             'title' => "Attestation scolaire" ,'inscription' =>$inscription

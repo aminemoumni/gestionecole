@@ -47,4 +47,7 @@ class ClasseRepository extends ServiceEntityRepository
         ;
     }
     */
+//     SELECT * FROM `classe` 
+// WHERE id not in (select classe_id from professeur_classe where professeur_classe.professeur_id = 1)
+    
 }

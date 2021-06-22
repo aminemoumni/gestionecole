@@ -110,6 +110,7 @@
     position: absolute;
     top: 45%;
     left: 45%;
+    /* transform: translate(-50%,-50%); */
 
 }
 .questionWidth {
@@ -212,4 +213,10 @@
 
 .bloc_start a {
     font-size: 1.6rem;
+}
+.addProfesseurClasse{
+    float: right;
+}
+.chooseClass{
+    display: flex;
 }

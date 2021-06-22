@@ -17,7 +17,7 @@ import './styles/etudiant.css';
 import './bootstrap';
 //const swal = require('sweetalert2');
 const $ = require('jquery');
-window.$ = $;
+global.$ = $;
 
 require('bootstrap');
 const dt = require( 'datatables.net');
@@ -30,7 +30,7 @@ import './inscription'
 import './classeEtudiant'
 import './classeProffesseur'
 
-$(".overlayOuvrage, .xOuvrage").on('click', function() {
+$("body").on('click', ".overlayOuvrage, .xOuvrage", function() {
     $('.overlayOuvrage, .popOuvrage').hide();
 })
 
