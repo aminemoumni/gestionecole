@@ -2,6 +2,7 @@
 
 namespace App\Controller\admin;
 
+use App\Entity\User;
 use App\Entity\Classe;
 use App\Entity\Etudiant;
 use App\Entity\Professeur;
@@ -16,6 +17,7 @@ use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
  * @Route("/admin/classe")
@@ -341,6 +343,36 @@ class ClasseController extends AbstractController
         
         return new JsonResponse($message);
 
+    }
+     /**
+     * @Route("/adminAddProfesseur", name="adminAddProfesseur")
+     */
+    public function adminAddProfesseur(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
+    {
+        $data = (object)$request->request->get('data');
+        $professeur = new Professeur();
+        $professeur->setName($data->nom);
+        $professeur->setPrenom($data->prenom);
+        $professeur->setEmail($data->email);
+        $professeur->setTel($data->tel);
+        $professeur->setDateNaiss(new \DateTime($data->dateNaissance));
+        
+        $this->em->persist($professeur);
+
+        $user = new User();
+        $user->setEmail($data->email);
+        $user->setProfesseur($professeur);
+        $user->setPassword(
+            $passwordEncoder->encodePassword(
+                $user,
+                "0123456789"
+            )
+        );
+        $user->setRoles(['ROLE_PROF']);
+
+        $this->em->persist($user);
+        $this->em->flush();
+        return new JsonResponse("success");
     }
 
 

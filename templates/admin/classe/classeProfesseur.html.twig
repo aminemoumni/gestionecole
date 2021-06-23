@@ -4,6 +4,9 @@
 
 {% block body %}
 <div class="container">
+        <div class="buttonContainer">
+            <buttontype="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addProfesseur">Ajouter professeur</button>
+        </div>
         <table id="listOfProfesseur" cellspacing="0" class="table table-bordered table-striped grid" style="width:100%">
             <thead>
                 <tr>
@@ -73,4 +76,46 @@
         </table>
     </div>
 </div>
+
+<!-- Modal Add Professeur -->
+<div class="modal fade" id="addProfesseur" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Ajouter professeur</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form id="addProfesseurForm">
+                <div class="mb-3">
+                  <label for="nom" class="form-label">Nom</label>
+                  <input type="text" name="nom" class="form-control" id="nom" aria-describedby="nom">
+                </div>
+                <div class="mb-3">
+                  <label for="prenom" class="form-label">Prenom</label>
+                  <input type="text" name="prenom" class="form-control" id="prenom">
+                </div>
+                <div class="mb-3">
+                    <label for="dateNaissance" class="form-label">Date naissance</label>
+                    <input type="date" name="dateNaissance" class="form-control" id="dateNaissance">
+                </div>
+                <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">Email address</label>
+                    <input type="email" class="form-control" name="email" id="exampleInputEmail1" aria-describedby="emailHelp">
+                </div>
+                <div class="mb-3">
+                    <label for="tel" class="form-label">Telephone</label>
+                    <input type="text" name="tel" class="form-control" id="tel">
+                </div>
+                
+                <button type="submit" class="btn btn-primary" style="font-size: 1.4rem;">Submit</button>
+              </form>
+        </div>
+        <!-- <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div> -->
+      </div>
+    </div>
+  </div>
 {% endblock %}
