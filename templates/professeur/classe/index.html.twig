@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ClasseController!{% endblock %}
+
+{% block body %}
+
+  <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+                <a href='{{path('professeur_show_cours')}}' class='btn btn-primary'>Cours</a>
+                <a href='{{path('professeur_show_epreuve')}}' class='btn btn-primary'>Epreuve</a>
+            </div>
+        </div>
+        <table id="professeur_listOfClassEtudiant" cellspacing="0" class="table table-bordered table-striped grid" style="width:100%">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Nom</th>
+                    <th>Prenom</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+            
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>#</th>  
+                    <th>Nom</th>
+                    <th>Prenom</th>
+                    <th>Action</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+{% endblock %}

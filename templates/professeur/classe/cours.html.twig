@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ClasseController!{% endblock %}
+
+{% block body %}
+
+  <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+                <a href='#' class='btn btn-primary bi bi-plus-circle'> Ajouter Cours</a>
+            </div>
+        </div>
+        <table id="professeur_listOfCours" cellspacing="0" class="table table-bordered table-striped grid" style="width:100%">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Classe</th>
+                    <th>Matiere</th>
+                    <th>Date Cours</th>
+                    <th>Heure Debut</th>
+                    <th>Heure fin</th>
+                    <th>Designation</th>
+                </tr>
+            </thead>
+            <tbody>
+            
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>#</th>
+                    <th>Classe</th>
+                    <th>Matiere</th>
+                    <th>Date Cours</th>
+                    <th>Heure Debut</th>
+                    <th>Heure fin</th>
+                    <th>Designation</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+{% endblock %}

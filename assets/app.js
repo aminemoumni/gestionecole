@@ -29,6 +29,7 @@ import './admin'
 import './inscription'
 import './classeEtudiant'
 import './classeProffesseur'
+import './professeur'
 
 $("body").on('click', ".overlayOuvrage, .xOuvrage", function() {
     $('.overlayOuvrage, .popOuvrage').hide();

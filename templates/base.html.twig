@@ -26,10 +26,11 @@
             </div>
             <div class="sidebar__body">
                 <ul class="ul">
+                {% if is_granted('ROLE_PROF') == false %}
                     <li  class="li">
                         <a class="li__a"><span class="fas fa-users"></span><span>Etudiant</span> <i class="bi bi-caret-down-fill {% if li == "etudiant" %}    activeRotate {% endif %}"></i></a>
                         <ul {% if li == 'etudiant' %}  style="display: block;" {% endif %}>
-                            {% if is_granted('ROLE_ADMIN') == false  %}
+                            {% if is_granted('ROLE_ADMIN') == false %}
                             <li>
                                 <a href="{{path('etudiant_new')}}"><span class="fas fa-user-lock"></span><span>Ajouter etudiant</span></a>
                             </li>
@@ -43,6 +44,7 @@
                             </li>
                         </ul>
                     </li>
+                    {% endif %}
                     <li  class="li">
                         <a class="li__a"><span class="fas fa-users"></span><span>Classe</span> <i class="bi bi-caret-down-fill {% if li == 'classe' %} activeRotate {% endif %}"></i></a>
                         <ul {% if li == 'classe' %}  style="display: block;" {% endif %}>
@@ -51,11 +53,19 @@
                                 <a href="{{path('admin_classe')}}"><span class="fas fa-user-lock"></span><span>Etudiant</span></a>
                             {% endif %}
                             </li>
-                            <li>
                             {% if is_granted('ROLE_ADMIN') %}
+                            <li>
                                 <a href="{{path('admin_classeP')}}"><span class="fas fa-school"></span><span>Professeur</span></a>
-                            {% endif %}
                             </li>
+                            {% elseif is_granted('ROLE_PROF') %}
+                                {% if app.user.professeur.classe %}
+                                    {% for classe in app.user.professeur.classe %}
+                                    <li>
+                                        <a href="{{path('professeur_show_classe', {'classe': classe.id})}}"><span class="fas fa-school"></span><span>{{classe.designation}}</span></a>
+                                    </li>
+                                    {% endfor %}
+                                {% endif %}
+                            {% endif %}
                         </ul>
                     </li>
                     <li  class="li">
