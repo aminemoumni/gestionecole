@@ -220,3 +220,10 @@
 .chooseClass{
     display: flex;
 }
+
+.buttonContainer {
+    margin: 2rem 0;
+}
+.modal {
+    font-size: 1.4rem !important;
+}

@@ -99,4 +99,33 @@ $(document).ready(function() {
         });
     });
 
+    $( "#addProfesseurForm" ).submit(function(e) {
+       
+        
+        var inputs = $('#myForm :input');
+        var data = {};
+        $.each($('#addProfesseurForm').serializeArray(), function(i, field) {
+            data[field.name] = field.value;
+        });
+        console.log(data)
+        $.ajax({
+            url: "/admin/classe/adminAddProfesseur",
+            type: 'post',
+            data:{data:data},
+            success: function (result) {
+                $( ".btn-close" ).trigger( "click" );
+                Swal.fire(
+                    'Insertion success',
+                    result,
+                    'success'
+                )
+                table.ajax.reload()
+            },
+            error: function(error) {
+                console.log(error)
+            }
+        });
+
+        e.preventDefault();
+      });
 });
