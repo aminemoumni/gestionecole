@@ -34,10 +34,16 @@ class Matiere
      */
     private $cours;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Professeur::class, mappedBy="matiere")
+     */
+    private $professeurs;
+
     public function __construct()
     {
         $this->epreuves = new ArrayCollection();
         $this->cours = new ArrayCollection();
+        $this->professeurs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -112,6 +118,33 @@ class Matiere
             if ($cour->getMatiere() === $this) {
                 $cour->setMatiere(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Professeur[]
+     */
+    public function getProfesseurs(): Collection
+    {
+        return $this->professeurs;
+    }
+
+    public function addProfesseur(Professeur $professeur): self
+    {
+        if (!$this->professeurs->contains($professeur)) {
+            $this->professeurs[] = $professeur;
+            $professeur->addMatiere($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProfesseur(Professeur $professeur): self
+    {
+        if ($this->professeurs->removeElement($professeur)) {
+            $professeur->removeMatiere($this);
         }
 
         return $this;

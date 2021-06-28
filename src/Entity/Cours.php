@@ -2,8 +2,9 @@
 
 namespace App\Entity;
 
-use App\Repository\CoursRepository;
+use App\Entity\Matiere;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\CoursRepository;
 
 /**
  * @ORM\Entity(repositoryClass=CoursRepository::class)
@@ -112,12 +113,12 @@ class Cours
         return $this;
     }
 
-    public function getMatiere(): ?Matieres
+    public function getMatiere(): ?Matiere
     {
         return $this->matiere;
     }
 
-    public function setMatiere(?Matieres $matiere): self
+    public function setMatiere(?Matiere $matiere): self
     {
         $this->matiere = $matiere;
 

@@ -335,9 +335,12 @@ class ClasseController extends AbstractController
     {
         
         $idProfesseur = $request->request->get('id');
-       
+        //dd($idProfesseur);
+        $user = $this->em->getRepository(User::class)->findOneBy(['professeur'=>$idProfesseur]);
         $professeur = $this->em->getRepository(Professeur::class)->find($idProfesseur);
+        //dd($professeur);
         $message = "<p style='font-size:1.4rem'>Le proffesseur <span class='bold'> " . $professeur->getName() ." </span><span class='bold'> " . $professeur->getPrenom() ."</span> a été bien supprimé</p>";
+        $this->em->remove($user);
         $this->em->remove($professeur);
         $this->em->flush();
         
@@ -350,12 +353,12 @@ class ClasseController extends AbstractController
     public function adminAddProfesseur(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
     {
         $data = (object)$request->request->get('data');
-        $userExist = $this->em->getRepository(User::class)->findBy([
-            'email' => $data->email
-        ]);
-        if($userExist) {
-            return new JsonResponse('Already Exist');
+        $userExist=$this->em->getRepository(User::class)->findBy(['email'=> $data->email]);
+        if($userExist)
+        {
+            return new JsonResponse("this user is already exists");
         }
+      
         $professeur = new Professeur();
         $professeur->setName($data->nom);
         $professeur->setPrenom($data->prenom);
@@ -364,21 +367,21 @@ class ClasseController extends AbstractController
         $professeur->setDateNaiss(new \DateTime($data->dateNaissance));
         
         $this->em->persist($professeur);
-
-        $user = new User();
-        $user->setEmail($data->email);
-        $user->setProfesseur($professeur);
-        $user->setPassword(
+        
+            $user = new User();
+            $user->setEmail($data->email);
+            $user->setProfesseur($professeur);
+            $user->setPassword(
             $passwordEncoder->encodePassword(
                 $user,
                 "0123456789"
             )
-        );
-        $user->setRoles(['ROLE_PROF']);
-
-        $this->em->persist($user);
+            );
+            $user->setRoles(['ROLE_PROF']);
+            $this->em->persist($user);
         $this->em->flush();
         return new JsonResponse("success");
+        
     }
 
 

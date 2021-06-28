@@ -1,3 +1,4 @@
+const { default: Swal } = require('sweetalert2');
 const app = require('./app');
 global.$ = $;
 
@@ -79,7 +80,6 @@ $(document).ready(function() {
     $('body').on('click', '.deleteProfesseur', function (e) {
         var id = $(this).attr('data-id');
        
-
         
         $.ajax({
             url: "/admin/classe/admin_delete_professeur",
@@ -99,7 +99,8 @@ $(document).ready(function() {
         });
     });
 
-    $( "#addProfesseurForm" ).submit(function(e) {S
+
+    $( "#addProfesseurForm" ).submit(function(e) {
         var data = {};
         $.each($('#addProfesseurForm').serializeArray(), function(i, field) {
             data[field.name] = field.value;
@@ -111,12 +112,24 @@ $(document).ready(function() {
             data:{data:data},
             success: function (result) {
                 $( ".btn-close" ).trigger( "click" );
-                Swal.fire(
-                    'Insertion success',
-                    result,
-                    'success'
-                )
-                table.ajax.reload()
+                if(result=="success")
+                    {
+                        Swal.fire(
+                    
+                            'Insertion success',
+                            result,
+                            'success'
+                            )
+                        table.ajax.reload()
+                    }
+                else {
+                         Swal.fire(
+                             'Insertion fail',
+                             result,
+                             'success'
+                         )
+                     }
+                    
             },
             error: function(error) {
                 console.log(error)

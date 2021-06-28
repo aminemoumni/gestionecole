@@ -49,9 +49,15 @@ class Professeur
      */
     private $classe;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Matiere::class, inversedBy="professeurs")
+     */
+    private $matiere;
+
     public function __construct()
     {
         $this->classe = new ArrayCollection();
+        $this->matiere = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -139,6 +145,30 @@ class Professeur
     public function removeClasse(Classe $classe): self
     {
         $this->classe->removeElement($classe);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Matiere[]
+     */
+    public function getMatiere(): Collection
+    {
+        return $this->matiere;
+    }
+
+    public function addMatiere(Matiere $matiere): self
+    {
+        if (!$this->matiere->contains($matiere)) {
+            $this->matiere[] = $matiere;
+        }
+
+        return $this;
+    }
+
+    public function removeMatiere(Matiere $matiere): self
+    {
+        $this->matiere->removeElement($matiere);
 
         return $this;
     }
