@@ -350,6 +350,12 @@ class ClasseController extends AbstractController
     public function adminAddProfesseur(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
     {
         $data = (object)$request->request->get('data');
+        $userExist = $this->em->getRepository(User::class)->findBy([
+            'email' => $data->email
+        ]);
+        if($userExist) {
+            return new JsonResponse('Already Exist');
+        }
         $professeur = new Professeur();
         $professeur->setName($data->nom);
         $professeur->setPrenom($data->prenom);

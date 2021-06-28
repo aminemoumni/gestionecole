@@ -99,10 +99,7 @@ $(document).ready(function() {
         });
     });
 
-    $( "#addProfesseurForm" ).submit(function(e) {
-       
-        
-        var inputs = $('#myForm :input');
+    $( "#addProfesseurForm" ).submit(function(e) {S
         var data = {};
         $.each($('#addProfesseurForm').serializeArray(), function(i, field) {
             data[field.name] = field.value;
