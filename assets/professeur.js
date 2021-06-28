@@ -38,4 +38,76 @@ $(document).ready(function() {
             "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/French.json"
         },
     });
+
+    
+    $( "#addCourseForm" ).submit(function(e) {
+
+        var data = {};
+        $.each($('#addCourseForm').serializeArray(), function(i, field) {
+            data[field.name] = field.value;
+        });
+        
+        $.ajax({
+            url: "/admin/professeur/addCourse",
+            type: 'post',
+            data:{data:data},
+            success: function (result) {
+                $( ".btn-close" ).trigger( "click" );
+                        Swal.fire(
+                    
+                            'Insertion success',
+                            result,
+                            'success'
+                            )
+                        table.ajax.reload()
+                    
+                
+                    
+            },
+            error: function(error) {
+                console.log(error)
+            }
+        });
+
+        e.preventDefault();
+      });
+
+    $( "#addEpreuveForm" ).submit(function(e) {
+
+        var data = {};
+        $.each($('#addEpreuveForm').serializeArray(), function(i, field) {
+            data[field.name] = field.value;
+        });
+        
+        $.ajax({
+            url: "/admin/professeur/addEpreuve",
+            type: 'post',
+            data:{data:data},
+            success: function (result) {
+                $( ".btn-close" ).trigger( "click" );
+               
+                        Swal.fire(
+                    
+                            'Insertion success',
+                            result,
+                            'success'
+                            )
+                        table.ajax.reload()
+                    
+                
+                    
+            },
+            error: function(error) {
+                console.log(error)
+            }
+        });
+
+        e.preventDefault();
+      });
+
+    $('body').on('click', '.addNote', function (e) {
+        var id = $(this).attr('data-id');
+        alert(id);
+        $('#addNoteForm').show();
+      });
 });

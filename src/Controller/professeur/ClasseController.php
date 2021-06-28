@@ -2,13 +2,17 @@
 
 namespace App\Controller\professeur;
 
+use App\Entity\Cours;
 use App\Entity\Classe;
+use App\Entity\Epreuve;
+use App\Entity\Matiere;
 use App\Entity\Professeur;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\User\User;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 /**
      * @Route("/admin/professeur")
@@ -35,10 +39,11 @@ class ClasseController extends AbstractController
      */
     public function ShowClasse(Request $request, Classe $classe): Response
     {
+        
         $session = $request->getSession();
         $session->set('classe_id', $classe->getId());
         return $this->render('professeur/classe/index.html.twig', [
-            'li' => 'classe'
+            'li' => 'classe',
         ]);
      
     }
@@ -96,6 +101,9 @@ class ClasseController extends AbstractController
             // dd($row['id']);
             $nestedData = array();
             $cd = $row['id'];
+            $actions = "<div class='actions'>"
+            . " <i class='bi bi-plus addNote'  data-id='".$row['id']."'></i>"
+            . "</div>";
             
             
             foreach (array_values($row) as $key => $value) {
@@ -106,7 +114,7 @@ class ClasseController extends AbstractController
                     $nestedData[] = $value;
                 }
             }
-           // $nestedData[] = $actions;
+            $nestedData[] = $actions;
             $nestedData["DT_RowId"] = $cd;
             $nestedData["DT_RowClass"] = $cd;
             $data[] = $nestedData;
@@ -127,8 +135,10 @@ class ClasseController extends AbstractController
      */
     public function ShowCours(): Response
     {
+        $matieres=$this->em->getRepository(Matiere::class)->findBy();
         return $this->render('professeur/classe/cours.html.twig', [
-            'li' => 'classe'
+            'li' => 'classe',
+            'matieres'=>$matieres,
         ]);
      
     }
@@ -137,10 +147,10 @@ class ClasseController extends AbstractController
      */
     public function ShowEpreuve(Request $request): Response
     {
-        $session = $request->getSession();
-        //dd($session->get('classe_id'));
+        $matieres=$this->em->getRepository(Matiere::class)->findAll();
         return $this->render('professeur/classe/epreuve.html.twig', [
-            'li' => 'classe'
+            'li' => 'classe',
+            'matieres'=>$matieres,
         ]);
      
     }
@@ -343,6 +353,53 @@ class ClasseController extends AbstractController
         );
         // dd($data);
         return new Response(json_encode($json_data));
+    }
+    /**
+     * @Route("/addCourse", name="professeur_add_course")
+     */
+    public function AddCourse(Request $request): Response
+    {
+        $data = (object)$request->request->get('data');
+        $session = $request->getSession();
+        $classe=$this->em->getRepository(Classe::class)->find($session->get('classe_id'));
+        $matiere=$this->em->getRepository(Matiere::class)->find($data->matiere);
+
+        $cours = new Cours();
+        $cours->setClasse($classe);
+        $cours->setMatiere($matiere);
+        $cours->setDateCours(new \DateTime($data->dateCourse));
+        $cours->setHeureD(new \DateTime($data->heureD));
+        $cours->setHeureF(new \DateTime($data->heureF));
+        $cours->setDesignation($data->designation);
+
+        $this->em->persist($cours);
+        $this->em->flush();
+        return new JsonResponse("success");
+        
+     
+    }
+    /**
+     * @Route("/addEpreuve", name="professeur_add_epreuve")
+     */
+    public function AddEpreuve(Request $request): Response
+    {
+         $data = (object)$request->request->get('data');
+        $session = $request->getSession();
+        $classe=$this->em->getRepository(Classe::class)->find($session->get('classe_id'));
+        $matiere=$this->em->getRepository(Matiere::class)->find($data->matiere);
+        
+        $epreuve = new Epreuve();
+        $epreuve->setClasse($classe);
+        $epreuve->setMatiere($matiere);
+        $epreuve->setDate(new \DateTime($data->dateEpreuve));
+        $epreuve->setHeureDebut(new \DateTime($data->heureD));
+        $epreuve->setHeureFin(new \DateTime($data->heureF));
+        $epreuve->setDesingation($data->designation);
+        
+        $this->em->persist($epreuve);
+        $this->em->flush();
+        return new JsonResponse("success");
+     
     }
     
 }

@@ -7,7 +7,7 @@
   <div class="container">
         <div class="row">
             <div class="col-md-3">
-                <a href='#' class='btn btn-primary bi bi-plus-circle'> Ajouter Epreuve</a>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addEpreuve"> Ajouter Epreuve</button>
             </div>
         </div>
         <table id="professeur_listOfEpreuve" cellspacing="0" class="table table-bordered table-striped grid" style="width:100%">
@@ -38,4 +38,45 @@
             </tfoot>
         </table>
     </div>
+    <!-- Modal Add Epreuve -->
+<div class="modal fade" id="addEpreuve" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Ajouter Epreuve</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form id="addEpreuveForm">
+                <div class="mb-3">
+                  <label for="matiere" class="form-label">Matiere</label>
+                  <select name="matiere" class="form-control" id="matiere">
+                      {% for matiere in app.user.professeur.matiere %}
+                     <option value="{{matiere.id}}">{{matiere.designation}}</option>
+                     {% endfor %}
+                  </select>
+                </div>
+                <div class="mb-3">
+                  <label for="dateEpreuve" class="form-label">Date Epreuve</label>
+                  <input type="date" name="dateEpreuve" class="form-control" id="dateEpreuve">
+                </div>
+                <div class="mb-3">
+                    <label for="heureD" class="form-label">Heure Debut</label>
+                    <input type="time" name="heureD" class="form-control" id="heureD">
+                </div>
+                <div class="mb-3">
+                    <label for="heureF" class="form-label">Heure Fin</label>
+                    <input type="time" class="form-control" name="heureF" id="heureF" >
+                </div>
+                <div class="mb-3">
+                    <label for="designation" class="form-label">Designation</label>
+                    <input type="text" name="designation" class="form-control" id="designation">
+                </div>
+                
+                <button type="submit" class="btn btn-primary" style="font-size: 1.4rem;">Submit</button>
+              </form>
+        </div>
+      </div>
+    </div>
+  </div>
 {% endblock %}

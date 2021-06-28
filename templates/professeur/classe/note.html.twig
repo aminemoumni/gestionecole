@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ClasseController!{% endblock %}
+
+{% block body %}
+
+<div class="modal fade" id="addNote" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Ajouter Note</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form id="addNoteForm">
+                <div class="mb-3">
+                  <label for="matiere" class="form-label">Matiere</label>
+                  <select name="matiere" class="form-control" id="matiere">
+                      {% for matiere in app.user.professeur.matiere %}
+                     <option value="{{matiere.id}}">{{matiere.designation}}</option>
+                     {% endfor %}
+                  </select>
+                </div>
+                <div class="mb-3">
+                  <label for="epreuve" class="form-label">Epreuve</label>
+                  <input type="text" name="epreuve" class="form-control" id="epreuve">
+                </div>
+                <div class="mb-3">
+                    <label for="note" class="form-label">Note</label>
+                    <input type="number" name="note" class="form-control" id="note">
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="font-size: 1.4rem;">Submit</button>
+              </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

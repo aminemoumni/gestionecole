@@ -2,10 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\EpreuveRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use App\Entity\Matiere;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\EpreuveRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity(repositoryClass=EpreuveRepository::class)
@@ -78,24 +79,24 @@ class Epreuve
 
     public function getHeureDebut(): ?\DateTimeInterface
     {
-        return $this->heurDebut;
+        return $this->heureDebut;
     }
 
     public function setHeureDebut(?\DateTimeInterface $heurDebut): self
     {
-        $this->heurDebut = $heurDebut;
+        $this->heureDebut = $heurDebut;
 
         return $this;
     }
 
     public function getHeureFin(): ?\DateTimeInterface
     {
-        return $this->heurFin;
+        return $this->heureFin;
     }
 
     public function setHeureFin(?\DateTimeInterface $heurFin): self
     {
-        $this->heurFin = $heurFin;
+        $this->heureFin = $heurFin;
 
         return $this;
     }
@@ -154,12 +155,12 @@ class Epreuve
         return $this;
     }
 
-    public function getMatiere(): ?Matieres
+    public function getMatiere(): ?Matiere
     {
         return $this->matiere;
     }
 
-    public function setMatiere(?Matieres $matiere): self
+    public function setMatiere(?Matiere $matiere): self
     {
         $this->matiere = $matiere;
 
