@@ -20,7 +20,7 @@ const $ = require('jquery');
 global.$ = $;
 
 require('bootstrap');
-const dt = require( 'datatables.net');
+const dt = require( 'datatables.net-bs4');
 const Swal = require('sweetalert2');
 window.Swal = Swal;
 

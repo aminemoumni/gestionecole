@@ -1,5 +1,5 @@
-const app = require('./app');
-global.$ = $;
+// const app = require('./app');
+// global.$ = $;
 
 
 
@@ -16,7 +16,7 @@ $(document).ready(function() {
             "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/French.json"
         },
     });
-    var table = $('#professeur_listOfCours').DataTable({
+    var tableCours = $('#professeur_listOfCours').DataTable({
         "lengthMenu": [[5, 25,50, 100,-1], [5 , 25, 50, 100, "All"]],
         "order": [[0, "desc"]],
         "ajax": '/admin/professeur/listCours',
@@ -27,7 +27,7 @@ $(document).ready(function() {
             "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/French.json"
         },
     });
-    var table = $('#professeur_listOfEpreuve').DataTable({
+    var tableEpreuve = $('#professeur_listOfEpreuve').DataTable({
         "lengthMenu": [[5, 25,50, 100,-1], [5 , 25, 50, 100, "All"]],
         "order": [[0, "desc"]],
         "ajax": '/admin/professeur/listEpreuve',
@@ -52,6 +52,7 @@ $(document).ready(function() {
             type: 'post',
             data:{data:data},
             success: function (result) {
+                tableCours.ajax.reload()
                 $( ".btn-close" ).trigger( "click" );
                         Swal.fire(
                     
@@ -59,7 +60,6 @@ $(document).ready(function() {
                             result,
                             'success'
                             )
-                        table.ajax.reload()
                     
                 
                     
@@ -87,12 +87,11 @@ $(document).ready(function() {
                 $( ".btn-close" ).trigger( "click" );
                
                         Swal.fire(
-                    
                             'Insertion success',
                             result,
                             'success'
                             )
-                        table.ajax.reload()
+                        tableEpreuve.ajax.reload()
                     
                 
                     
@@ -108,6 +107,5 @@ $(document).ready(function() {
     $('body').on('click', '.addNote', function (e) {
         var id = $(this).attr('data-id');
         alert(id);
-        $('#addNoteForm').show();
       });
 });

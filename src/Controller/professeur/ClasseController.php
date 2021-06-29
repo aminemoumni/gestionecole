@@ -102,7 +102,7 @@ class ClasseController extends AbstractController
             $nestedData = array();
             $cd = $row['id'];
             $actions = "<div class='actions'>"
-            . " <i class='bi bi-plus addNote'  data-id='".$row['id']."'></i>"
+            . " <i class='bi bi-plus addNote'  data-bs-toggle='modal' data-bs-target='#addNote'  data-id='".$row['id']."'></i>"
             . "</div>";
             
             
@@ -135,10 +135,10 @@ class ClasseController extends AbstractController
      */
     public function ShowCours(): Response
     {
-        $matieres=$this->em->getRepository(Matiere::class)->findBy();
+        // $matieres=$this->em->getRepository(Matiere::class)->findBy();
         return $this->render('professeur/classe/cours.html.twig', [
             'li' => 'classe',
-            'matieres'=>$matieres,
+            // 'matieres'=>$matieres,
         ]);
      
     }

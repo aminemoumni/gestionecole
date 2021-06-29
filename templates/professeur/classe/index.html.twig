@@ -7,8 +7,8 @@
   <div class="container">
         <div class="row">
             <div class="col-md-3">
-                <a href='{{path('professeur_show_cours')}}' class='btn btn-primary'>Cours</a>
-                <a href='{{path('professeur_show_epreuve')}}' class='btn btn-primary'>Epreuve</a>
+                <a href="{{path('professeur_show_cours')}}" class='btn btn-primary'>Cours</a>
+                <a href="{{path('professeur_show_epreuve')}}" class='btn btn-primary'>Epreuve</a>
             </div>
         </div>
         <table id="professeur_listOfClassEtudiant" cellspacing="0" class="table table-bordered table-striped grid" style="width:100%">
@@ -33,4 +33,7 @@
             </tfoot>
         </table>
     </div>
+
+
+    {% include 'professeur/classe/note.html.twig'%}
 {% endblock %}
