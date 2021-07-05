@@ -39,7 +39,7 @@ $(document).ready(function() {
         },
     });
 
-    
+
     $( "#addCourseForm" ).submit(function(e) {
 
         var data = {};

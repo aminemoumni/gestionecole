@@ -227,3 +227,8 @@
 .modal {
     font-size: 1.4rem !important;
 }
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    padding: 0;
+    border: 0;
+}
