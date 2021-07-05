@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use Mpdf\Mpdf;
-use App\Entity\Classe;
 use App\Entity\Etudiant;
 use App\Entity\Attestation;
 use App\Entity\Inscription;
@@ -28,7 +27,7 @@ class EtudiantController extends AbstractController
         $user=$this->getUser();
         $inscriptions=$entityManager->getRepository(Inscription::class)->findBy(['user'=>$user]);
 
-        
+
        return $this->render('etudiant/index.html.twig',[
            'inscriptions'=>$inscriptions,
            'li' => 'etudiant'
