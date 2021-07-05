@@ -68,18 +68,16 @@
                             {% endif %}
                         </ul>
                     </li>
+                    {% if is_granted('ROLE_ADMIN') %}
                     <li  class="li">
-                        <a class="li__a"><span class="fas fa-users"></span><span>Users</span> <i class="bi bi-caret-down-fill"></i></a>
-                        <ul>
+                        <a class="li__a"><span class="fas fa-users"></span><span>Matiere</span> <i class="bi bi-caret-down-fill {% if li == 'matiere' %} activeRotate {% endif %}"></i></a>
+                        <ul {% if li == 'matiere' %}  style="display: block;" {% endif %}>
                             <li>
-                                <a href=""><span class="fas fa-user-lock"></span><span>Admins</span></a>
-                            </li>
-                            <li>
-                                <a href=""><span class="fas fa-school"></span><span>Students</span></a>
+                                <a href="{{path('admin_matiere')}}"><span class="fas fa-user-lock"></span><span>List matiere</span></a>
                             </li>
                         </ul>
                     </li>
-                    
+                    {% endif %}
                 </ul>
                 <li class="li settings">
                     <a class="li__a"><span class="bi bi-gear-fill"></span><span>Settings</span></a>

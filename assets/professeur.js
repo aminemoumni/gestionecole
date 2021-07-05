@@ -108,6 +108,6 @@ $(document).ready(function() {
     $('body').on('click', '.addNote', function (e) {
         var id = $(this).attr('data-id');
         alert(id);
-        $('#addNoteForm').show();
+        
       });
 });

@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello MatiereController!{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addMatiere"> Ajouter Matiere</button>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <h3>Listes matieres :</h3>
+        <div class="table-responsive">
+            <table id="mytable" class="table table-bordred table-striped">
+                <thead>
+                    <th>Id matiere</th>
+                    <th>Designation</th>
+                    <th>Action</th>
+                </thead>
+                <tbody class="addMatiere">
+                {% include 'admin/matiere/listMatiere.html.twig' %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="addMatiere" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Ajouter matiere</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form id="addMatiereForm">
+                <div class="mb-3">
+                  <label for="designation" class="form-label">Designation</label>
+                  <input type="text" name="designation" class="form-control" id="nom" aria-describedby="designation">
+                </div>
+                <button type="submit" class="btn btn-primary" style="font-size: 1.4rem;">Submit</button>
+              </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
