@@ -30,6 +30,7 @@ import './inscription'
 import './classeEtudiant'
 import './classeProffesseur'
 import './professeur'
+import './matiere'
 
 $("body").on('click', ".overlayOuvrage, .xOuvrage", function() {
     $('.overlayOuvrage, .popOuvrage').hide();

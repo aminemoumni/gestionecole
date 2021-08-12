@@ -72,6 +72,7 @@ $(document).ready(function() {
         e.preventDefault();
       });
 
+      
     $( "#addEpreuveForm" ).submit(function(e) {
 
         var data = {};
@@ -104,8 +105,61 @@ $(document).ready(function() {
         e.preventDefault();
       });
 
+      var idEtudiant=0;
     $('body').on('click', '.addNote', function (e) {
-        var id = $(this).attr('data-id');
-        alert(id);
+        idEtudiant = $(this).attr('data-id');
+        //alert(idEtudiant);
+        
+      });
+    $('body').on('click', '.seeNote', function (e) {
+        idEtudiant = $(this).attr('data-id');
+        //alert(idEtudiant);
+        $('.overlayOuvrage, .popOuvrage, .loadingScreen').show()
+        $.ajax({
+            url: "/admin/professeur/seeNote",
+            type: 'post',
+            data:{id:idEtudiant},
+            success: function (result) {
+                //$('.seeNote').html(result)
+                $( ".btn-close" ).trigger( "click" ); 
+                //$('#seeNoteForm').show();
+                $('.noteEtudiant').html(result);
+                $(".loadingScreen").hide();
+                
+            },
+            error: function(error) {
+                console.log(error)
+            }
+        });
+        
+    });
+
+    $( "#addNoteForm" ).submit(function(e) {
+          
+        var data = {};
+        $.each($('#addNoteForm').serializeArray(), function(i, field) {
+            data[field.name] = field.value;
+        });
+        $.ajax({
+            url: "/admin/professeur/addNote",
+            type: 'post',
+            data:{data:data,id:idEtudiant},
+            success: function (result) {
+                $( ".btn-close" ).trigger( "click" );
+               
+                        Swal.fire(
+                            'Insertion success',
+                            result,
+                            'success'
+                            )
+                        
+                    
+            },
+            error: function(error) {
+                console.log(error)
+            }
+        });
+
+        e.preventDefault();
       });
 });

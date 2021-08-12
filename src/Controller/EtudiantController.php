@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use Mpdf\Mpdf;
+use App\Entity\Classe;
 use App\Entity\Etudiant;
 use App\Entity\Attestation;
 use App\Entity\Inscription;

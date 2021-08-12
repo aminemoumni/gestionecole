@@ -2,10 +2,12 @@
 
 namespace App\Controller\professeur;
 
+use App\Entity\Note;
 use App\Entity\Cours;
 use App\Entity\Classe;
 use App\Entity\Epreuve;
 use App\Entity\Matiere;
+use App\Entity\Etudiant;
 use App\Entity\Professeur;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,7 +30,6 @@ class ClasseController extends AbstractController
      */
     public function index(): Response
     {
-        
         return $this->render('professeur/classe/index.html.twig', [
             'li' => 'classe'
         ]);
@@ -42,8 +43,9 @@ class ClasseController extends AbstractController
         
         $session = $request->getSession();
         $session->set('classe_id', $classe->getId());
+        $epreuve=$this->em->getRepository(Epreuve::class)->findby(array('classe' =>$session->get('classe_id')));
         return $this->render('professeur/classe/index.html.twig', [
-            'li' => 'classe',
+            'li' => 'classe','epreuves'=>$epreuve ,
         ]);
      
     }
@@ -102,7 +104,8 @@ class ClasseController extends AbstractController
             $nestedData = array();
             $cd = $row['id'];
             $actions = "<div class='actions'>"
-            . " <i class='bi bi-plus addNote'  data-bs-toggle='modal' data-bs-target='#addNote'  data-id='".$row['id']."'></i>"
+            . " <i class='bi bi-plus addNote' data-bs-toggle='modal' data-bs-target='#addNote'  data-id='".$row['id']."'></i>"
+            . " <i class='bi bi-eye seeNote'  data-id='".$row['id']."'></i>"
             . "</div>";
             
             
@@ -135,10 +138,10 @@ class ClasseController extends AbstractController
      */
     public function ShowCours(): Response
     {
-        // $matieres=$this->em->getRepository(Matiere::class)->findBy();
+
+        
         return $this->render('professeur/classe/cours.html.twig', [
             'li' => 'classe',
-            // 'matieres'=>$matieres,
         ]);
      
     }
@@ -147,10 +150,9 @@ class ClasseController extends AbstractController
      */
     public function ShowEpreuve(Request $request): Response
     {
-        $matieres=$this->em->getRepository(Matiere::class)->findAll();
+        
         return $this->render('professeur/classe/epreuve.html.twig', [
             'li' => 'classe',
-            'matieres'=>$matieres,
         ]);
      
     }
@@ -395,11 +397,47 @@ class ClasseController extends AbstractController
         $epreuve->setHeureDebut(new \DateTime($data->heureD));
         $epreuve->setHeureFin(new \DateTime($data->heureF));
         $epreuve->setDesingation($data->designation);
-        
+        $epreuve->setValide(0);
         $this->em->persist($epreuve);
         $this->em->flush();
         return new JsonResponse("success");
      
+    }
+    /**
+     * @Route("/addNote", name="professeur_add_note")
+     */
+    public function AddNote(Request $request): Response
+    {
+         $data = (object)$request->request->get('data');
+         $idEtudiant=$request->request->get('id');
+        $epreuve=$this->em->getRepository(Epreuve::class)->find($data->epreuve);
+        $etudiant=$this->em->getRepository(Etudiant::class)->find($idEtudiant);
+        //dd($epreuve);
+        $note = new Note();
+        $note->setEpreuve($epreuve);
+        $note->setEtudiant($etudiant);
+        $note->setNote($data->note);
+        
+        $this->em->persist($note);
+        $this->em->flush();
+        return new JsonResponse("success");
+     
+    }
+    /**
+     * @Route("/seeNote", name="professeur_see_note")
+     */
+    public function SeeNote(Request $request): Response
+    {
+        $idEtudiant=$request->request->get('id');
+        //dd($idEtudiant);
+        $etudiant=$this->em->getRepository(Etudiant::class)->find($idEtudiant);
+        $notes=$this->em->getRepository(Note::class)->findby(array('etudiant' => $idEtudiant));
+        //dd($notes);
+        $html = $this->render('professeur/classe/inc/seeNote.html.twig', [
+            'notes' => $notes,
+            'etudiant' => $etudiant
+        ]);
+        return new JsonResponse($html);
     }
     
 }

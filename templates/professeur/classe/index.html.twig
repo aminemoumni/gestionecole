@@ -36,4 +36,37 @@
 
 
     {% include 'professeur/classe/note.html.twig'%}
+
+<div class="overlayOuvrage" >
+
+</div>
+<div class="popOuvrage">
+    <div class="loadingScreen"><i class="fas fa-spinner fa-spin"></i></div>
+    <i class="fa fa-times xOuvrage"></i>
+    <div class="noteEtudiant">
+        <div class="form-group">
+            <ul>
+                <li>
+                    <p>Nom: <span>...</span></p>
+                </li>
+                <li>
+                    <p>Prenom: <span>...</span></p>
+                </li>
+            </ul>
+            <label class="col-md-3 control-label required" for="appbundle_theme_discipline" style="font-weight: bold">Classe</label>
+        </div>
+        <table style="margin-top: 2rem;" class="table table-bordered">
+        <thead>
+            <tr>
+            <th scope="col" style="background-color: #333; color: white;">epreuve</th>
+            <th scope="col" style="background-color: #333;color: white;">matiere</th>
+            <th scope="col" style="background-color: #333;color: white;">note</th>
+            </tr>
+        </thead>
+        <tbody id="tbodyNote">
+            
+        </tbody>
+        </table>
+    </div>
+</div>    
 {% endblock %}

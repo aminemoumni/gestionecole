@@ -1,32 +1,28 @@
 <div class="modal fade" id="addNote" tabindex="-1" aria-labelledby="addNote" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="addNote">Ajouter Note</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-            <form id="addNoteForm">
-                <div class="mb-3">
-                  <label for="matiere" class="form-label">Matiere</label>
-                  <select name="matiere" class="form-control" id="matiere">
-                      {% for matiere in app.user.professeur.matiere %}
-                     <option value="{{matiere.id}}">{{matiere.designation}}</option>
-                     {% endfor %}
-                  </select>
-                </div>
-                <div class="mb-3">
-                  <label for="epreuve" class="form-label">Epreuve</label>
-                  <input type="text" name="epreuve" class="form-control" id="epreuve">
-                </div>
-                <div class="mb-3">
-                    <label for="note" class="form-label">Note</label>
-                    <input type="number" name="note" class="form-control" id="note">
-                </div>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addNote">Ajouter Note</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="addNoteForm">
+          <div class="mb-3">
+            <label for="epreuve" class="form-label">Epreuve</label>
+            <select name="epreuve" class="form-control" id="epreuve">
+              {% for epreuve in epreuves %}
+              <option value="{{epreuve.id}}">{{epreuve.desingation}} {{epreuve.matiere.designation}}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="note" class="form-label">Note</label>
+            <input type="number" name="note" pattern="[0-9]{2}" class="form-control" id="note">
+          </div>
 
-                <button type="submit" class="btn btn-primary" style="font-size: 1.4rem;">Submit</button>
-              </form>
-        </div>
+          <button type="submit" class="btn btn-primary" style="font-size: 1.4rem;">Submit</button>
+        </form>
       </div>
     </div>
   </div>
+</div>

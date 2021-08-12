@@ -55,6 +55,11 @@ class Epreuve
      */
     private $matiere;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $valide;
+
     public function __construct()
     {
         $this->notes = new ArrayCollection();
@@ -163,6 +168,18 @@ class Epreuve
     public function setMatiere(?Matiere $matiere): self
     {
         $this->matiere = $matiere;
+
+        return $this;
+    }
+
+    public function getValide(): ?int
+    {
+        return $this->valide;
+    }
+
+    public function setValide(?int $valide): self
+    {
+        $this->valide = $valide;
 
         return $this;
     }
