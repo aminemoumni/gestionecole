@@ -104,4 +104,28 @@ class EtudiantController extends AbstractController
         $mpdf->Output('Myfile.pdf','D');
         return new Response('The PDF file has been succesfully generated !');
     }
+
+
+    /**
+    * @Route("/planification/{index}", name="etudiant_planification")
+    */
+    public function planification($index): Response
+    { 
+        return $this->render('etudiant/planification.html.twig',[
+            'li' => 'child',
+            'i' => $index
+        ]);
+    }
+
+    /**
+    * @Route("/note/{index}", name="etudiant_note")
+    */
+    public function note($index): Response
+    { 
+        return $this->render('etudiant/note.html.twig',[
+            'li' => 'child',
+            'i' => $index
+
+        ]);
+    }
 }

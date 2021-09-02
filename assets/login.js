@@ -78,7 +78,7 @@ $(document).ready(function(){
 
 $(document).ready(function(){
     $(".fa-times").click(function() {
-        console.log("hi");
+        // console.log("hi");
         $(".overlay-back").remove();
         $(".model").remove();
     });

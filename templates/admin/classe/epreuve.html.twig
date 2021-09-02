@@ -1,0 +1,77 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ClasseController!{% endblock %}
+
+{% block body %}
+<div class="container">
+        <div class="row">
+            <div class="col-md-3">
+                <select id="selectClasseEpreuve" class="form-select" data-column ='0'>
+                    <option value="">Sélectionnez classe...</option>
+                    {% for classe in classes %}
+                    <option value="{{classe.id}}">{{classe.designation}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+<div class="container">
+        <table id="listOfEpreuve" cellspacing="0" class="table table-bordered table-striped grid" style="width:100%">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Date Epreuve</th>
+                    <th>Designation</th>
+                    <th>Classe</th>
+                    <th>Matiere</th>
+                    <th>Heure Debut</th>
+                    <th>Heure Fin</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+            
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>#</th>
+                    <th>Date Epreuve</th>
+                    <th>Designation</th>
+                    <th>Classe</th>
+                    <th>Matiere</th>
+                    <th>Heure Debut</th>
+                    <th>Heure Fin</th>
+                    <th>Action</th>
+                </tr>
+            </tfoot>
+        </table>
+</div>
+
+<div class="overlayOuvrage" >
+
+</div>
+<div class="popOuvrage">
+    <div class="loadingScreen"><i class="fas fa-spinner fa-spin"></i></div>
+    <i class="fa fa-times xOuvrage"></i>
+    <div class="noteEpreuve">
+    <div class="form-group">
+    <ul>
+        <li>
+            <p>Epreuve: <span>...</span></p>
+        </li>
+    </ul>
+   </div>
+   <table style="margin-top: 2rem;" class="table table-bordered">
+        <thead>
+            <tr>
+                <th scope="col" style="background-color: #333; color: white;">nom</th>
+                <th scope="col" style="background-color: #333;color: white;">prenom</th>
+                <th scope="col" style="background-color: #333;color: white;">note</th>
+            </tr>
+        </thead>
+        <tbody id="tbodyNote">
+        </tbody>
+   </table>
+    </div>
+    </div>
+</div>
+{% endblock %}

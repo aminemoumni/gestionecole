@@ -113,16 +113,15 @@ $(document).ready(function() {
       });
     $('body').on('click', '.seeNote', function (e) {
         idEtudiant = $(this).attr('data-id');
-        //alert(idEtudiant);
         $('.overlayOuvrage, .popOuvrage, .loadingScreen').show()
+
         $.ajax({
             url: "/admin/professeur/seeNote",
             type: 'post',
             data:{id:idEtudiant},
             success: function (result) {
-                //$('.seeNote').html(result)
+                console.log(result);
                 $( ".btn-close" ).trigger( "click" ); 
-                //$('#seeNoteForm').show();
                 $('.noteEtudiant').html(result);
                 $(".loadingScreen").hide();
                 
@@ -130,6 +129,31 @@ $(document).ready(function() {
             error: function(error) {
                 console.log(error)
             }
+        });
+
+        $('body').on('change', '#updateNote', function (e) {
+            //alert("changed");
+            var idNote = $(this).attr('data-id');
+            var note = $('#updateNote').val();
+            //alert(idNote);
+            $.ajax({
+                url: "/admin/professeur/updateNote",
+                type: 'post',
+                data:{id:idNote,note:note},
+                success: function (result) {
+                    $( ".btn-close" ).trigger( "click" );
+               
+                    Swal.fire(
+                        'Modification success',
+                        result,
+                        'success'
+                        )
+                    
+                },
+                error: function(error) {
+                    console.log(error)
+                }
+            }); 
         });
         
     });

@@ -1,0 +1,29 @@
+<div class="form-group">
+    <ul>
+        <li>
+            <p>Epreuve: <span>{{epreuve.desingation}}</span></p>
+        </li>
+        <li>
+            <p>Matiere: <span>{{epreuve.matiere.designation}}</span></p>
+        </li>
+    </ul>
+</div>
+<table style="margin-top: 2rem;" class="table table-bordered">
+  <thead>
+    <tr>
+      <th scope="col" style="background-color: #333; color: white;">nom</th>
+      <th scope="col" style="background-color: #333;color: white;">prenom</th>
+      <th scope="col" style="background-color: #333;color: white;">note</th>
+    </tr>
+  </thead>
+  <tbody id="tbodyNote">
+    {% for note in notes %} 
+            <tr>
+              <td>{{note.etudiant.nom}}</td> 
+              <td>{{note.etudiant.prenom}}</td>
+              <td>{{note.note}}</td>
+              
+            </tr>
+    {% endfor %} 
+  </tbody>
+</table>

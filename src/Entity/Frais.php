@@ -27,6 +27,11 @@ class Frais
      */
     private $classe;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $designation;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -52,6 +57,18 @@ class Frais
     public function setClasse(?classe $classe): self
     {
         $this->classe = $classe;
+
+        return $this;
+    }
+
+    public function getDesignation(): ?string
+    {
+        return $this->designation;
+    }
+
+    public function setDesignation(?string $designation): self
+    {
+        $this->designation = $designation;
 
         return $this;
     }

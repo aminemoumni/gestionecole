@@ -437,7 +437,22 @@ class ClasseController extends AbstractController
             'notes' => $notes,
             'etudiant' => $etudiant
         ]);
-        return new JsonResponse($html);
+        // dd($html->getContent());
+        return new JsonResponse($html->getContent());
+    }
+     /**
+     * @Route("/updateNote", name="professeur_update_note")
+     */
+    public function UpdateNote(Request $request): Response
+    {
+        $idNote=$request->request->get('id');
+        $valueNote=$request->request->get('note');
+        $note=$this->em->getRepository(Note::class)->find($idNote);
+        $note->setNote($valueNote);
+        $this->em->persist($note);
+        $this->em->flush();
+
+        return new JsonResponse("success");
     }
     
 }

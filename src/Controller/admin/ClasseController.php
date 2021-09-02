@@ -2,8 +2,11 @@
 
 namespace App\Controller\admin;
 
+use App\Entity\Note;
 use App\Entity\User;
+use App\Entity\Frais;
 use App\Entity\Classe;
+use App\Entity\Epreuve;
 use App\Entity\Etudiant;
 use App\Entity\Professeur;
 use App\Entity\Inscription;
@@ -400,4 +403,186 @@ class ClasseController extends AbstractController
     //     $data = $serializer->serialize($myObject, 'json');
     //     return $data;
     // }
+
+
+    /**
+     * @Route("/epreuve", name="admin_classeEpreuve")
+     */
+    public function indexEpreuve(): Response
+    {
+        $classes=$this->em->getRepository(Classe::class)->findAll();
+        return $this->render('admin/classe/epreuve.html.twig', [
+            'controller_name' => 'ClasseController',
+            'li' => 'classe',
+            'classes'=>$classes
+        ]);
+    }
+    /**
+     * @Route("/listEpreuve", name="admin_listEpreuve")
+     */
+    public function listEpreuve(Request $request): Response
+    {
+        $em = $this->getDoctrine()->getManager();
+        $params = $request->query;
+        $session = $request->getSession();
+        // dd($session->get('classe_id'));
+        // dd($params);
+        $where = $totalRows = $sqlRequest = "";
+        $filtre = "where 1 = 1 ";
+        if (!empty($params->get('columns')[0]['search']['value'])) {
+            $filtre .= " and ep.id = '" . $params->get('columns')[0]['search']['value'] . "' ";
+        }
+        $filtre .="and ep.valide =0";
+        
+        $columns = array(
+            array( 'db' => 'ep.id', 'dt' => 0 ),
+            array( 
+                'db' => 'ep.date', 
+                'dt' => 1,
+                'formatter' => function( $d, $row ) {
+                    return date('d-m-Y', strtotime($d));
+                }
+            ),
+            array( 'db' => 'ep.desingation',  'dt' => 2 ),
+            array( 'db' => 'cl.designation as classe', 'dt' => 3 ),
+            array( 'db' => 'm.designation as matier',  'dt' => 4 ),
+            array( 
+                'db' => 'ep.heure_debut', 
+                'dt' => 5,
+                'formatter' => function( $d, $row ) {
+                    return date('H:i:s', strtotime($d));
+                }
+            ),
+            array( 
+                'db' => 'ep.heure_fin', 
+                'dt' => 6,
+                'formatter' => function( $d, $row ) {
+                    return date('H:i:s', strtotime($d));
+                }
+            ),
+            
+
+        );
+
+        $sql = "SELECT " . implode(", ", DatatablesController::Pluck($columns, 'db')) . "
+                FROM epreuve ep 
+                inner join classe cl on cl.id=ep.classe_id
+                inner join matiere m on m.id=ep.matiere_id
+                $filtre"
+        ;
+        // dd($sql);
+        $totalRows .= $sql;
+        $sqlRequest .= $sql;
+        $stmt = $this->getDoctrine()->getManager()->getConnection()->prepare($sqlRequest);
+        $stmt->execute();
+        $totalRecords = count($stmt->fetchAll());
+        $my_columns = DatatablesController::Pluck($columns, 'db');
+        
+        // search 
+        $where = DatatablesController::Search($request, $columns);
+        if (isset($where) && $where != '') {
+            $sqlRequest .= $where;
+        }
+        // dd($sqlRequest);
+        $sqlRequest .= DatatablesController::Order($request, $columns);
+        $stmt = $this->getDoctrine()->getManager()->getConnection()->prepare($sqlRequest);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+        // dd($result);
+
+        $data = array();
+        
+        foreach ($result as $key => $row) {
+            // dd($row['id']);
+            $nestedData = array();
+            $cd = $row['id'];
+            $actions = "<div class='actions'>"
+            . " <i class='bi bi-check valideEpreuve' data-id='".$row['id']."'></i>"
+            . " <i class='bi bi-eye valideNote'  data-id='".$row['id']."'></i>"
+            . "</div>";
+            
+            
+            foreach (array_values($row) as $key => $value) {
+                $nestedData[] = $value;
+            }
+            $nestedData[] = $actions;
+            $nestedData["DT_RowId"] = $cd;
+            $nestedData["DT_RowClass"] = $cd;
+            $data[] = $nestedData;
+            
+        }
+
+        $json_data = array(
+            "draw" => intval($params->get('draw')),
+            "recordsTotal" => intval($totalRecords),
+            "recordsFiltered" => intval($totalRecords),
+            "data" => $data   // total data array
+        );
+        // dd($data);
+        return new Response(json_encode($json_data));
+    }
+    /**
+     * @Route("/validEpreuve", name="admin_valid_epreuve")
+     */
+    public function validEpreuve(Request $request): Response
+    {
+         $idEpreuve = $request->request->get('id');
+       
+        $epreuve=$this->em->getRepository(Epreuve::class)->find($idEpreuve);
+       
+        $epreuve->setValide(1);
+
+        $this->em->persist($epreuve);
+        $this->em->flush();
+        return new JsonResponse("success");
+     
+    }
+    /**
+     * @Route("/validNote", name="admin_valid_note")
+     */
+    public function ValidNote(Request $request): Response
+    {
+        $idEpreuve=$request->request->get('id');
+    
+        $epreuve=$this->em->getRepository(Epreuve::class)->find($idEpreuve);
+        $notes=$this->em->getRepository(Note::class)->findby(array('epreuve' => $epreuve));
+        $html = $this->render('admin/classe/inc/validNote.html.twig', [
+            'epreuve' => $epreuve,
+            'notes' => $notes
+        ]);
+        
+        return new JsonResponse($html->getContent());
+    }
+     /**
+     * @Route("/frais", name="admin_classeFrais")
+     */
+    public function indexFrais(): Response
+    {
+        $frais=$this->em->getRepository(Frais::class)->findAll();
+        $classes=$this->em->getRepository(Classe::class)->findAll();
+        return $this->render('admin/classe/frais.html.twig', [
+            'controller_name' => 'ClasseController',
+            'li' => 'classe',
+            'frais'=>$frais,
+            'classes'=>$classes
+        ]);
+    }
+    /**
+     * @Route("/addFrais", name="add_frais")
+     */
+    public function addFrais(Request $request): Response
+    {
+        $data = (object)$request->request->get('data');
+        $classe=$this->em->getRepository(Classe::class)->find($data->classe);
+        $frais = new Frais();
+        $frais->setClasse($classe);
+        $frais->setDesignation($data->designation);
+        $frais->setPrix($data->prix);
+        
+        $this->em->persist($frais);
+        
+        $this->em->flush();
+        return new JsonResponse("success");
+       
+    }
 }

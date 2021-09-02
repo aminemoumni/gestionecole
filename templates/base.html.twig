@@ -57,6 +57,12 @@
                             <li>
                                 <a href="{{path('admin_classeP')}}"><span class="fas fa-school"></span><span>Professeur</span></a>
                             </li>
+                            <li>
+                                <a href="{{path('admin_classeEpreuve')}}"><span class="fas fa-school"></span><span>Epreuve</span></a>
+                            </li>
+                            <li>
+                                <a href="{{path('admin_classeFrais')}}"><span class="fas fa-school"></span><span>Frais</span></a>
+                            </li>
                             {% elseif is_granted('ROLE_PROF') %}
                                 {% if app.user.professeur.classe %}
                                     {% for classe in app.user.professeur.classe %}
@@ -77,6 +83,20 @@
                             </li>
                         </ul>
                     </li>
+                    {% elseif is_granted('ROLE_PROF')== false %}
+                    {% for index, etudiant in app.user.etudiant %}
+                    <li  class="li">
+                        <a class="li__a"><span class="fas fa-users"></span><span>{{etudiant.nom}} {{etudiant.prenom}}</span> <i class="bi bi-caret-down-fill {% if li == 'child' and index == i %} activeRotate {% endif %}"></i></a>
+                        <ul {% if li == 'child' and index == i %}  style="display: block;" {% endif %}>
+                            <li>
+                                <a href="{{path('etudiant_planification', {index: index})}}"><span class="fas fa-user-lock"></span><span>emploi du temps</span></a>
+                            </li>
+                            <li>
+                                <a href="{{path('etudiant_note', {index: index})}}"><span class="fas fa-user-lock"></span><span>note</span></a>
+                            </li>
+                        </ul>
+                    </li>
+                    {% endfor %}
                     {% endif %}
                 </ul>
                 <li class="li settings">
@@ -101,7 +121,7 @@
                     </div>
                     <div class="header__profile">
                         <div class="header__profile--image">
-                            <p>Amine Moumni</p>
+                            <p>Amine Moumni {#{{app.user.email}}#}</p> 
                             <img src="{{ asset('images/user.png') }}" alt="">
                             <!-- <i class="fas fa-sort-down" id="menuProfile"></i> -->
                         </div>

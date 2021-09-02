@@ -8,20 +8,21 @@
         </li>
     </ul>
 </div>
-<table style="margin-top: 2rem;" class="table table-bordered updateNote">
+<table style="margin-top: 2rem;" class="table table-bordered">
   <thead>
     <tr>
       <th scope="col" style="background-color: #333; color: white;">epreuve</th>
-            <th scope="col" style="background-color: #333;color: white;">matiere</th>
-            <th scope="col" style="background-color: #333;color: white;">note</th>
+      <th scope="col" style="background-color: #333;color: white;">matiere</th>
+      <th scope="col" style="background-color: #333;color: white;">note</th>
     </tr>
   </thead>
   <tbody id="tbodyNote">
     {% for note in notes %} 
             <tr>
               <td>{{note.epreuve.desingation}}</td> 
-              {# <td>{{note.matiere.designation}}</td> #}
-              <td>{{note.note}}</td>
+              <td>{{note.epreuve.matiere.designation}}</td>
+              <td><input type="text" value="{{note.note}}" style="border: none;" id="updateNote" data-id="{{note.id}}"></td>
+              
             </tr>
     {% endfor %} 
   </tbody>

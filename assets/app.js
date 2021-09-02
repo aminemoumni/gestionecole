@@ -31,6 +31,8 @@ import './classeEtudiant'
 import './classeProffesseur'
 import './professeur'
 import './matiere'
+import './classeEpreuve'
+import './classeFrais'
 
 $("body").on('click', ".overlayOuvrage, .xOuvrage", function() {
     $('.overlayOuvrage, .popOuvrage').hide();
