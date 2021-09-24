@@ -46,4 +46,16 @@ $(document).ready(function() {
         table.columns(index).search(value).draw();    
         e.preventDefault();
     });
+
+    var tableNote = $('#child_listOfNoteEpreuve').DataTable({
+        "lengthMenu": [[5, 25,50, 100,-1], [5 , 25, 50, 100, "All"]],
+        "order": [[0, "desc"]],
+        "ajax": '/etudiant/listNote',
+        "processing": true,
+        "serverSide": true,
+        "deferRender": true,
+        "language": {
+            "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/French.json"
+        },
+    });
 } );

@@ -2,11 +2,13 @@
 
 namespace App\Controller\admin;
 
+use Mpdf\Mpdf;
 use App\Entity\Note;
 use App\Entity\User;
 use App\Entity\Frais;
 use App\Entity\Classe;
 use App\Entity\Epreuve;
+use App\Entity\Matiere;
 use App\Entity\Etudiant;
 use App\Entity\Professeur;
 use App\Entity\Inscription;
@@ -113,6 +115,7 @@ class ClasseController extends AbstractController
             if($etudiant->getClasse()) {
                 $actions = "<div class='actions'>"
                 . " <i class='bi bi-dash-circle annuleEtudiant' data-id='".$row['id']."'></i>"
+                . " <i class='fa fa-print addFacture'  data-id='".$row['id']."'></i>"
                 . "</div>";
             } else {
                 $actions = "<div class='actions'>"
@@ -200,6 +203,7 @@ class ClasseController extends AbstractController
             
                 $actions = "<div class='actions'>"
                 . " <i class='bi bi-eye seeClass'  data-id='".$row['id']."'></i>"
+                . " <i class='bi bi-person-lines-fill seeMatiere'  data-id='".$row['id']."'></i>"
                 . " <i class='bi bi-trash deleteProfesseur'  data-id='".$row['id']."'></i>"
                 . "</div>";
             
@@ -584,5 +588,129 @@ class ClasseController extends AbstractController
         $this->em->flush();
         return new JsonResponse("success");
        
+    }
+    /**
+     * @Route("/addFacture", name="addFacture")
+     */
+    public function adminAddFacture(Request $request): Response
+    {
+        $idEtudiant = $request->request->get('id');
+        $etudiant = $this->em->getRepository(Etudiant::class)->find($idEtudiant);
+        $classe=$this->em->getRepository(Classe::class)->find($etudiant->getClasse());
+        //dd($classe);
+        $frais=$this->em->getRepository(Frais::class)->findby(array('classe' => $classe));
+        
+        $html = $this->render('admin/classe/inc/printFacture.html.twig', [
+            'etudiant' => $etudiant,
+            'frais' => $frais
+        ]);
+        // dd($html->getContent());
+        return new JsonResponse($html->getContent());
+
+    }
+       /**
+     * @Route("/addFraisEtudiant", name="addFraisEtudiant")
+     */
+    public function adminAddFraisEtudiant(Request $request): Response
+    {
+        $idFrais = $request->request->get('id');
+        $frais=$this->em->getRepository(Frais::class)->find($idFrais);
+        $index=$request->request->get('index');
+        $html = "<tr><td>".$index."</td>"
+               ."<td>".$frais->getDesignation()."</td>"
+               ."<td>".$frais->getPrix()."</td>" 
+               ."<td><i class='bi bi-trash deleteFraisEtudiant'  data-id='".$index."'></i></td></tr>";
+        //dd($html);
+        return new JsonResponse($html);
+
+    }
+      /**
+    * @Route("/facture", name="facture")
+    */
+    public function facture(Request $request)
+    {
+        $value = $request->request->get('data');
+        // $data=$request->request->get('data');
+       dd($value);
+        $mpdf= new Mpdf();
+        $html = $this->renderView('admin/classe/inc/facture.html.twig', [
+            'title' => "Facture" ,
+            
+        ]);
+       
+        $mpdf->WriteHtml($html);
+        $mpdf->Output('facture.pdf','D');
+        return new Response('The PDF file has been succesfully generated !');
+    }
+    /**
+     * @Route("/ProffeseurMatiere", name="ProffeseurMatiere")
+     */
+    public function proffeseurMatiere(Request $request): Response
+    {
+        $idProfesseur = $request->request->get('id');
+        $professeur = $this->em->getRepository(Professeur::class)->find($idProfesseur);
+        $sqlRequest = "Select * from matiere where matiere.id not in (select matiere_id from professeur_matiere where professeur_id = $idProfesseur)";
+        $stmt = $this->getDoctrine()->getManager()->getConnection()->prepare($sqlRequest);
+        $stmt->execute();
+        $matieres = $stmt->fetchAll();
+        
+        $html = $this->render('admin/classe/inc/matiereProffesor.html.twig', [
+            'professeur' => $professeur,
+            'matieres' => $matieres
+        ]);
+        // dd($html->getContent());
+        return new JsonResponse($html->getContent());
+
+    }
+     /**
+     * @Route("/admin_set_matiere", name="admin_set_matiere")
+     */
+    public function adminSetMatiere(Request $request): Response
+    {
+        $idMatiere = $request->request->get('idMatiere');
+        $idProfesseur = $request->request->get('idProfesseur');
+
+        $professeur = $this->em->getRepository(Professeur::class)->find($idProfesseur);
+        $matiere=$this->em->getRepository(Matiere::class)->find($idMatiere);
+        $professeur->addMatiere($matiere);
+        $this->em->flush();
+        $sqlRequest = "Select * from matiere where matiere.id not in (select matiere_id from professeur_matiere where professeur_id = $idProfesseur)";
+        $stmt = $this->getDoctrine()->getManager()->getConnection()->prepare($sqlRequest);
+        $stmt->execute();
+        $matieres = $stmt->fetchAll();
+      
+        $html = $this->render('admin/classe/inc/matiereProffesor.html.twig', [
+            'professeur' => $professeur,
+            'matieres' => $matieres
+        ]);
+        
+        return new JsonResponse($html->getContent());
+
+    }
+    /**
+     * @Route("/admin_matiereProfesseur_annuler", name="admin_matiereProfesseur_annuler")
+     */
+    public function adminMatiereAnnuler(Request $request): Response
+    {
+        
+        $idMatiere = $request->request->get('idMatiere');
+        $idProfesseur = $request->request->get('idProfesseur');
+        $professeur = $this->em->getRepository(Professeur::class)->find($idProfesseur);
+        $matiere=$this->em->getRepository(Matiere::class)->find($idMatiere);
+        $professeur->removeMatiere($matiere);
+        $this->em->flush();
+
+        $sqlRequest = "Select * from matiere where matiere.id not in (select matiere_id from professeur_matiere where professeur_id = $idProfesseur)";
+        $stmt = $this->getDoctrine()->getManager()->getConnection()->prepare($sqlRequest);
+        $stmt->execute();
+        $matieres = $stmt->fetchAll();
+      
+        $html = $this->render('admin/classe/inc/matiereProffesor.html.twig', [
+            'professeur' => $professeur,
+            'matieres' => $matieres
+        ]);
+        
+        return new JsonResponse($html->getContent());
+
     }
 }

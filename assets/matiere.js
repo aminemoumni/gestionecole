@@ -23,5 +23,27 @@ $(document).ready(function() {
         });
 
         e.preventDefault();
-      });
+    });
+
+    $('body').on('click', '.deleteMatiere', function (e) {
+        var id = $(this).attr('data-id');
+       
+        
+        $.ajax({
+            url: "/admin/matiere/admin_delete_matiere",
+            type: 'post',
+            data:{id:id},
+            success: function (result) {
+                Swal.fire(
+                    'Suppression du matiere',
+                    result,
+                    'success'
+                )
+                table.ajax.reload()
+            },
+            error: function(error) {
+                console.log(error)
+            }
+        });
+    });
 });

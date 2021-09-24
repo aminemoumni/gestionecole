@@ -43,7 +43,7 @@ class ClasseController extends AbstractController
         
         $session = $request->getSession();
         $session->set('classe_id', $classe->getId());
-        $epreuve=$this->em->getRepository(Epreuve::class)->findby(array('classe' =>$session->get('classe_id')));
+        $epreuve=$this->em->getRepository(Epreuve::class)->findby(array('classe' =>$classe));
         return $this->render('professeur/classe/index.html.twig', [
             'li' => 'classe','epreuves'=>$epreuve ,
         ]);
@@ -235,12 +235,14 @@ class ClasseController extends AbstractController
             // dd($row['id']);
             $nestedData = array();
             $cd = $row['id'];
-            
+            $actions = "<div class='actions'>"
+            . " <i class='bi bi-trash deleteCours' data-id='".$row['id']."'></i>"
+            . "</div>";
             
             foreach (array_values($row) as $key => $value) {
                 $nestedData[] = $value;
             }
-           // $nestedData[] = $actions;
+            $nestedData[] = $actions;
             $nestedData["DT_RowId"] = $cd;
             $nestedData["DT_RowClass"] = $cd;
             $data[] = $nestedData;
@@ -335,12 +337,14 @@ class ClasseController extends AbstractController
             // dd($row['id']);
             $nestedData = array();
             $cd = $row['id'];
-            
+            $actions = "<div class='actions'>"
+            . " <i class='bi bi-trash deleteEpreuve' data-id='".$row['id']."'></i>"
+            . "</div>";
             
             foreach (array_values($row) as $key => $value) {
                 $nestedData[] = $value;
             }
-           // $nestedData[] = $actions;
+            $nestedData[] = $actions;
             $nestedData["DT_RowId"] = $cd;
             $nestedData["DT_RowClass"] = $cd;
             $data[] = $nestedData;
@@ -453,6 +457,39 @@ class ClasseController extends AbstractController
         $this->em->flush();
 
         return new JsonResponse("success");
+    }
+
+    /**
+     * @Route("/deleteCours", name="deleteCours")
+     */
+    public function deleteCours(Request $request): Response
+    {
+        
+        $idCours = $request->request->get('id');
+        $cours = $this->em->getRepository(Cours::class)->find($idCours);
+        
+        $message = "<p style='font-size:1.4rem'>Le cours<span class='bold'> " . $cours->getDesignation() ."</span> a été bien supprimé</p>";
+        $this->em->remove($cours);
+        $this->em->flush();
+        
+        return new JsonResponse($message);
+
+    }
+    /**
+     * @Route("/deleteEpreuve", name="deleteEpreuve")
+     */
+    public function deleteEpreuve(Request $request): Response
+    {
+        
+        $idEpreuve = $request->request->get('id');
+        $epreuve = $this->em->getRepository(Epreuve::class)->find($idEpreuve);
+        
+        $message = "<p style='font-size:1.4rem'>L'epreuve'<span class='bold'> " . $epreuve->getDesingation() ."</span> a été bien supprimé</p>";
+        $this->em->remove($epreuve);
+        $this->em->flush();
+        
+        return new JsonResponse($message);
+
     }
     
 }

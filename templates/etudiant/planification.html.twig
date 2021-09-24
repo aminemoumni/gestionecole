@@ -3,6 +3,31 @@
 {% block title %}Emploi du temps{% endblock %}
 
 {% block body %}
-
-
+<style>
+#planning{
+              width:80%;
+              margin:auto;
+         }
+</style>
+ {# {{dump(courses,epreuves)}} #}
+ <div id="planning"></div>
+<script>
+    window.onload=()=>{
+      
+        var calendarEl = document.getElementById('planning');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+          initialView: 'timeGridWeek',
+          locale: 'fr',
+          headerToolbar:{
+              start:'prev,next today',
+              center:'title',
+              end:'timeGridWeek,dayGridMonth'
+          },
+          events: {{courses|raw}}
+           
+          
+        });
+        calendar.render();
+    }
+  </script>
 {% endblock %}

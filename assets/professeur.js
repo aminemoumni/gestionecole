@@ -186,4 +186,48 @@ $(document).ready(function() {
 
         e.preventDefault();
       });
+
+      $('body').on('click', '.deleteCours', function (e) {
+        var id = $(this).attr('data-id');
+       
+        
+        $.ajax({
+            url: "/admin/professeur/deleteCours",
+            type: 'post',
+            data:{id:id},
+            success: function (result) {
+                Swal.fire(
+                    'Suppression du cours',
+                    result,
+                    'success'
+                )
+                tableCours.ajax.reload()
+            },
+            error: function(error) {
+                console.log(error)
+            }
+        });
+    });
+
+    $('body').on('click', '.deleteEpreuve', function (e) {
+        var id = $(this).attr('data-id');
+       
+        
+        $.ajax({
+            url: "/admin/professeur/deleteEpreuve",
+            type: 'post',
+            data:{id:id},
+            success: function (result) {
+                Swal.fire(
+                    'Suppression du matiere',
+                    result,
+                    'success'
+                )
+                tableEpreuve.ajax.reload()
+            },
+            error: function(error) {
+                console.log(error)
+            }
+        });
+    });
 });

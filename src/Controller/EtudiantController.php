@@ -3,13 +3,16 @@
 namespace App\Controller;
 
 use Mpdf\Mpdf;
+use App\Entity\Cours;
 use App\Entity\Classe;
+use App\Entity\Epreuve;
 use App\Entity\Etudiant;
 use App\Entity\Attestation;
 use App\Entity\Inscription;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Controller\professeur\DatatablesController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -109,23 +112,208 @@ class EtudiantController extends AbstractController
     /**
     * @Route("/planification/{index}", name="etudiant_planification")
     */
-    public function planification($index): Response
+    public function planification($index,Request $request): Response
     { 
-        return $this->render('etudiant/planification.html.twig',[
+        $em = $this->getDoctrine()->getManager();
+        $session = $request->getSession();
+        //dd($this->getUser());
+        $i=0;
+        $etudiants=$em->getRepository(Etudiant::class)->findby(['user'=>$this->getUser()]);
+        foreach($etudiants as $etudiants)
+        {
+                if($i==$index)
+                {
+                    
+                    
+                    $session->set('etudiant_id', $etudiants->getId());
+                    
+                }
+                $i++;
+            
+            
+        }
+        
+        //    dd($session->get('etudiant_id'));
+        
+        $etudiant=$em->getRepository(Etudiant::class)->find($session->get('etudiant_id'));
+        $classe=$em->getRepository(Classe::class)->find($etudiant->getClasse());
+        $cours=$em->getRepository(Cours::class)->findby(['classe'=>$classe]);
+        $epreuve=$em->getRepository(Epreuve::class)->findby(['classe'=>$classe]);
+        //dd($cours,$epreuves);
+        $courses = [];
+
+        foreach($cours as $rows){
+            $courses[] = [
+                "id" => $rows->getId(),
+                "start" => $rows->getHeureD()->format('Y-m-d H:i:s'),
+                "end" => $rows->getHeureF()->format('Y-m-d H:i:s'),
+                "title" => $rows->getDesignation(),
+                "backgroundColor" => 'blue',
+                "borderColor" => 'black',
+                "textColor" => 'black',
+                "allDay" => false
+            ];
+        }
+
+        $dataCourses = json_encode($courses);
+
+        $epreuves = [];
+
+        foreach($epreuve as $rows){
+            $epreuves[] = [
+                "id" => $rows->getId(),
+                "start" => $rows->getHeureDebut()->format('Y-m-d H:i:s'),
+                "end" => $rows->getHeureFin()->format('Y-m-d H:i:s'),
+                "title" => $rows->getDesingation(),
+                "backgroundColor" => 'red',
+                "borderColor" => 'black',
+                "textColor" => 'black',
+                "allDay" => false
+            ];
+        }
+
+        $dataEpreuves = json_encode($epreuves);
+        //dd($dataCourses,$dataEpreuves);
+        return $this->render('etudiant/planification.html.twig',
+        
+        [
             'li' => 'child',
-            'i' => $index
+            'i' => $index,
+            "courses"=>compact('dataCourses'),
+            "epreuves"=>compact('dataEpreuves')
         ]);
     }
 
     /**
     * @Route("/note/{index}", name="etudiant_note")
     */
-    public function note($index): Response
+    public function note($index,Request $request): Response
     { 
+        $em = $this->getDoctrine()->getManager();
+        $session = $request->getSession();
+        $i=0;
+        $etudiants=$em->getRepository(Etudiant::class)->findby(['user'=>$this->getUser()]);
+        foreach($etudiants as $etudiants)
+        {
+                if($i==$index)
+                {
+                    
+                    //dd($i,$index);
+                    $session->set('etudiant_id', $etudiants->getId());
+                    
+                }
+                $i++;
+            
+            
+        }
+        //dd($session->get('etudiant_id'));
+        //$session = $request->getSession();
+        //$session->set('etudiant_id', $index->getId());
         return $this->render('etudiant/note.html.twig',[
             'li' => 'child',
             'i' => $index
 
         ]);
     }
+    /**
+    * @Route("/listNote", name="etudiant_listNote")
+    */
+    public function listNote(Request $request): Response
+    {  $em = $this->getDoctrine()->getManager();
+        $params = $request->query;
+        $session = $request->getSession();
+        //dd($session->get('etudiant_id'));
+        // dd($params);
+        $where = $totalRows = $sqlRequest = "";
+        $filtre = "where 1 = 1 ";
+        if (!empty($params->get('columns')[0]['search']['value'])) {
+            $filtre .= " and e.id = '" . $params->get('columns')[0]['search']['value'] . "' ";
+        }
+        $filtre .="and n.etudiant_id  = ".$session->get('etudiant_id')."";
+        
+        $columns = array(
+            array( 'db' => 'e.id', 'dt' => 0 ),
+            array( 'db' => 'e.desingation', 'dt' => 1 ),
+            array( 'db' => 'm.designation', 'dt' => 2 ),
+            array( 'db' => 'n.note',  'dt' => 3 ),
+
+        );
+
+        $sql = "SELECT " . implode(", ", DatatablesController::Pluck($columns, 'db')) . "
+                FROM epreuve e 
+                inner join matiere m on m.id=e.matiere_id
+                inner join note n on e.id=n.epreuve_id
+                $filtre"
+        ;
+
+        $totalRows .= $sql;
+        $sqlRequest .= $sql;
+        $stmt = $this->getDoctrine()->getManager()->getConnection()->prepare($sqlRequest);
+        $stmt->execute();
+        $totalRecords = count($stmt->fetchAll());
+
+        $my_columns = DatatablesController::Pluck($columns, 'db');
+
+        // search 
+        $where = DatatablesController::Search($request, $columns);
+        if (isset($where) && $where != '') {
+            $sqlRequest .= $where;
+        }
+        // dd($sqlRequest);
+        $sqlRequest .= DatatablesController::Order($request, $columns);
+        $stmt = $this->getDoctrine()->getManager()->getConnection()->prepare($sqlRequest);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+
+        $data = array();
+        $i = 1;
+        foreach ($result as $key => $row) {
+            // dd($row['id']);
+            $nestedData = array();
+            $cd = $row['id'];
+            // $actions = "<div class='actions'>"
+            // . " <i class='bi bi-plus addNote' data-bs-toggle='modal' data-bs-target='#addNote'  data-id='".$row['id']."'></i>"
+            // . " <i class='bi bi-eye seeNote'  data-id='".$row['id']."'></i>"
+            // . "</div>";
+            
+            
+            foreach (array_values($row) as $key => $value) {
+                if($key == 0) {
+                    $nestedData[] = $i;
+                    $i++;
+                } else {
+                    $nestedData[] = $value;
+                }
+            }
+            // $nestedData[] = $actions;
+            $nestedData["DT_RowId"] = $cd;
+            $nestedData["DT_RowClass"] = $cd;
+            $data[] = $nestedData;
+            
+        }
+
+        $json_data = array(
+            "draw" => intval($params->get('draw')),
+            "recordsTotal" => intval($totalRecords),
+            "recordsFiltered" => intval($totalRecords),
+            "data" => $data   // total data array
+        );
+        // die;
+        return new Response(json_encode($json_data));
+    }
+    /**
+    * @Route("/releveNote", name="etudiant_releve_note")
+    */
+    public function releveNote(Request $request)
+    {
+        $mpdf= new Mpdf();
+        $html = $this->renderView('etudiant/relveNote.html.twig', [
+            'title' => "Releve de note" 
+        ]);
+       
+        $mpdf->WriteHtml($html);
+        $mpdf->Output('releveDeNote.pdf','D');
+        return new Response('The PDF file has been succesfully generated !');
+    }
+
 }

@@ -91,7 +91,6 @@ $(document).ready(function() {
                     result,
                     'success'
                 )
-                table.ajax.reload()
             },
             error: function(error) {
                 console.log(error)
@@ -138,4 +137,62 @@ $(document).ready(function() {
 
         e.preventDefault();
       });
+
+      $('body').on('click', '.seeMatiere', function (e) {
+        var id = $(this).attr('data-id');
+        // $('.overlayMatiere, .popMatiere, .loadingScreen').show()
+
+        
+        $.ajax({
+            url: "/admin/classe/ProffeseurMatiere",
+            type: 'post',
+            data:{id:id},
+            success: function (result) {
+                $('.professeurMatiere').html(result)
+                //$(".loadingScreen").hide()
+            },
+            error: function(error) {
+                console.log(error)
+            }
+        });
+    });
+
+    $('body').on('click', '.addProfesseurMatiere', function (e) {
+            
+        var idMatiere = $('#selectMatiere').val(); 
+        var idProfesseur = $(this).attr('data-idProfesseur'); 
+       
+         $.ajax({
+            url: "/admin/classe/admin_set_matiere",
+            type: 'post',
+            data:{idMatiere:idMatiere,idProfesseur:idProfesseur},
+            success: function (result) {
+                $('.professeurMatiere').html(result)
+            },
+            error: function(error) {
+                console.log(error)
+            }
+        });
+     
+    });  
+
+    $('body').on('click', '.desafecterProfesseurMatiere', function (e) {
+            
+        var idMatiere = $(this).attr('data-idMatiere');
+        var idProfesseur = $(this).attr('data-idprofesseur');
+        
+         $.ajax({
+            url: "/admin/classe/admin_matiereProfesseur_annuler",
+            type: 'post',
+            data:{idMatiere:idMatiere,idProfesseur:idProfesseur},
+            success: function (result) {
+                $('.professeurMatiere').html(result)
+            },
+            error: function(error) {
+                console.log(error)
+            }
+        });
+     
+    }); 
+
 });

@@ -146,7 +146,7 @@ class EtudiantController extends AbstractController
         $etudiant->setDateNaiss($inscription->getDateNaiss());
         $etudiant->setVille($inscription->getVille());
         // $etudiant->setClasse($inscription->getClasse());
-        $etudiant->setUser($this->getUser());
+        $etudiant->setUser($inscription->getId());
         $etudiant->setCodeAdmission('1');
         // dd($inscription->getClasse());
         //dd($etudiant);

@@ -3,6 +3,7 @@
 namespace App\Controller\admin;
 
 use App\Entity\Matiere;
+use App\Entity\Professeur;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -54,5 +55,22 @@ class MatiereController extends AbstractController
         ]);
         return new JsonResponse($html->getContent());
         
+    }
+    
+    /**
+     * @Route("/admin_delete_matiere", name="admin_delete_matiere")
+     */
+    public function adminDeleteMatiere(Request $request): Response
+    {
+        
+        $idMatiere = $request->request->get('id');
+        $matiere = $this->em->getRepository(Matiere::class)->find($idMatiere);
+        //dd($professeur);
+        $message = "<p style='font-size:1.4rem'>La matiere<span class='bold'> " . $matiere->getDesignation() ."</span> a été bien supprimé</p>";
+        $this->em->remove($matiere);
+        $this->em->flush();
+        
+        return new JsonResponse($message);
+
     }
 }
