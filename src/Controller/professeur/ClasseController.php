@@ -30,8 +30,10 @@ class ClasseController extends AbstractController
      */
     public function index(): Response
     {
+        $epreuve=$this->em->getRepository(Epreuve::class)->findAll();
         return $this->render('professeur/classe/index.html.twig', [
-            'li' => 'classe'
+            'li' => 'classe',
+            'epreuves'=>$epreuve 
         ]);
        
     }

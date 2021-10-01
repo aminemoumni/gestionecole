@@ -3,9 +3,11 @@
 namespace App\Controller;
 
 use Mpdf\Mpdf;
+use App\Entity\Note;
 use App\Entity\Cours;
 use App\Entity\Classe;
 use App\Entity\Epreuve;
+use App\Entity\Matiere;
 use App\Entity\Etudiant;
 use App\Entity\Attestation;
 use App\Entity\Inscription;
@@ -211,7 +213,8 @@ class EtudiantController extends AbstractController
         //$session->set('etudiant_id', $index->getId());
         return $this->render('etudiant/note.html.twig',[
             'li' => 'child',
-            'i' => $index
+            'i' => $index,
+            'etudiant_id'=>$session->get('etudiant_id')
 
         ]);
     }
@@ -230,7 +233,8 @@ class EtudiantController extends AbstractController
             $filtre .= " and e.id = '" . $params->get('columns')[0]['search']['value'] . "' ";
         }
         $filtre .="and n.etudiant_id  = ".$session->get('etudiant_id')."";
-        
+        $filtre .=" and e.valide  = 1";
+
         $columns = array(
             array( 'db' => 'e.id', 'dt' => 0 ),
             array( 'db' => 'e.desingation', 'dt' => 1 ),
@@ -302,13 +306,82 @@ class EtudiantController extends AbstractController
         return new Response(json_encode($json_data));
     }
     /**
-    * @Route("/releveNote", name="etudiant_releve_note")
+    * @Route("/releveNote/{etudiant}", name="etudiant_releve_note")
     */
-    public function releveNote(Request $request)
+    public function releveNote(Etudiant $etudiant,Request $request)
     {
+        
+        $k=0;
+        $moyenne_classe=0;
+        $em = $this->getDoctrine()->getManager();
+       $etudiants=$em->getRepository(Etudiant::class)->findby(['classe'=>$etudiant->getClasse()]);
+    //    $rnote_etudiant=[][];
+       foreach($etudiants as $row)
+       {   
+            $moyenneClasse[$k]["moyenneMatiere"]=0;
+            $moyenne_generale=0;
+            $j=0;
+            $matieres=$em->getRepository(Matiere::class)->findAll();
+            $moyenneClasse[$k]["etudiant"]=$row->getNom();
+            foreach($matieres as $matiere)
+            {   
+                
+                $i=0;
+                $moyenne_matiere=0;
+                
+                $epreuves=$em->getRepository(Epreuve::class)->findby(['classe'=>$etudiant->getClasse(),'matiere'=>$matiere->getId()]);
+                $rnote_etudiant[$j]["matiere"]=$matiere->getDesignation();
+                foreach($epreuves as $epreuve)
+                {
+                    if($epreuve->getValide()==1)
+                    {
+                        
+                        $notes=$em->getRepository(Note::class)->findby(['epreuve'=>$epreuve->getId()]);
+                    
+                        foreach($notes as $note)
+                       { 
+                        if($note->getEtudiant()==$etudiant)
+                        {
+                            $i++;
+                            $rnote_etudiant[$j]["controlN".$i.""]=$note->getNote();
+                            //dd($rnote_etudiant[1]);
+                            // dd($note->getNote());
+                            $moyenne_matiere=$moyenne_matiere+$note->getNote();
+                            
+                            
+                        }
+                        if($note->getEtudiant()==$row)
+                        {
+                            
+                            $moyenneClasse[$k]["moyenneMatiere"]= $moyenneClasse[$k]["moyenneMatiere"]+$note->getNote();
+                        }
+                        
+                       }
+                       //dd($moyenne_matiere);
+                        
+                    }
+                    
+
+                }
+                $rnote_etudiant[$j]["noteMatiere"]=$moyenne_matiere/$i;
+                $moyenne_generale=$moyenne_generale+$rnote_etudiant[$j]["noteMatiere"];
+                $j++; 
+            }  
+            $moyenneClasse[$k]["moyenneMatiere"]= $moyenneClasse[$k]["moyenneMatiere"]/($j+1);
+            $moyenne_classe=$moyenne_classe+$moyenneClasse[$k]["moyenneMatiere"];
+              $moyenne_generale = $moyenne_generale/$j;
+              $k++;
+        
+       }
+       $moyenne_classe=$moyenne_classe/$k;
+       // dd($moyenne_classe);
         $mpdf= new Mpdf();
-        $html = $this->renderView('etudiant/relveNote.html.twig', [
-            'title' => "Releve de note" 
+        $html = $this->renderView('etudiant/releveNote.html.twig', [
+            'title' => "Releve de note" ,
+            'rnote_etudiant'=>$rnote_etudiant,
+            'moyenne_generale'=>$moyenne_generale,
+            'etudiant'=>$etudiant,
+            'moyenne_classe'=>$moyenne_classe
         ]);
        
         $mpdf->WriteHtml($html);

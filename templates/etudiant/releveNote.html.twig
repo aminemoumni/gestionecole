@@ -6,7 +6,72 @@
 
 <body>
 
-    <h1>{{title}}</h1>
+ <div>
+        <div >
+            <div >
+                <div style="text-align: center;">
+                    <h1>{{title}}</h1>
+                </div>
+                <div >
+                    <div style="font-weight: bold;">
+                        <label>Nom : {{etudiant.nom}}</label>
+                        <label>Prenom :{{etudiant.prenom}}</label>
+                        <label>Classe :{{etudiant.classe.designation}}</label>
+                        <label>Classe :{{etudiant.dateNaiss|date("Y-m-d")}}</label>
+                        <br/>
+                        <label>Fait le : {{ "now"|date("d/m/Y") }}</label>
+                        <table style="margin-top: 5rem; margin-left: auto; margin-right: auto;" class="table table-bordered fraisEtudiant">';
+         <tr>
+         <th scope="col" style="background-color: #333;color: white;">Matiere</th>
+         <th scope="col" style="background-color: #333;color: white;">Controle N1</th>
+         <th scope="col" style="background-color: #333;color: white;">Controle N2</th>
+         <th scope="col" style="background-color: #333;color: white;">Note Matiere</th>
+         </tr>
+   {% for row in rnote_etudiant %}
+   <tr>
+      <td>{{row.matiere}}</td>
+      <td>{{row.controlN1}}</td>
+      {% if row.controlN2 is defined  %}
+      <td>{{row.controlN2}}</td>
+      {% else %}
+      <td></td>
+      {% endif %}
+      
+      <td>{{row.noteMatiere}}</td>
+   </tr>
+   {% endfor %}
+    
+    </table>
+    <table border="1">
+    <tr>
+      <td>Moyenne générale :</td>
+      <td>{{moyenne_generale}} </td>
+    </tr>
+    <tr>
+    <td>Moyenne de classe :</td>
+      <td>{{moyenne_classe}}</td>
+    </tr>
+    <tr>
+    <td>Resultat :</td>
+      <td>{% if moyenne_generale <5  %}
+                      échoué
+                      {% else %}
+                       admis 
+                      {% endif %}</td>
+    </tr>
+                    
+   </table>
+                      
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+
+    </div>
+    
+   
+
 
 </body>
 
