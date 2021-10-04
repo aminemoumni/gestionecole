@@ -33,12 +33,11 @@ import './professeur'
 import './matiere'
 import './classeEpreuve'
 import './classeFrais'
+import './profile'
 
 $("body").on('click', ".overlayOuvrage, .xOuvrage", function() {
     $('.overlayOuvrage, .popOuvrage').hide();
 })
 
-$("body").on('click', ".overlayMatiere, .xMatiere", function() {
-    $('.overlayMatiere, .popMatiere').hide();
-})
+
 

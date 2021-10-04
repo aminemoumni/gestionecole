@@ -50,4 +50,46 @@
       </div>
     </div>
   </div>
+
+
+
+
+
+
+
+  <div class="overlayOuvrage" >
+
+</div>
+<div class="popOuvrage">
+    <div class="loadingScreen"><i class="fas fa-spinner fa-spin"></i></div>
+    <i class="fa fa-times xOuvrage"></i>
+    <div class="contentMatiere">
+        <div class="form-group">
+            
+            <label class="col-md-3 control-label required" for="appbundle_theme_discipline" style="font-weight: bold">Professeur</label>
+            <div class="col-md-9 chooseProf">
+                <select id="selectProf"  class="form-control input-sm ">
+                    <div style="height: 200px; overflow-y: scroll ">
+                    <option>Choisir un professeur</option>
+                    
+                    </div>
+                </select>
+                <button type="button" class="btn btn-secondary addProfesseurMatiere">ajouter</button>
+            </div>
+        </div>
+        <table style="margin-top: 2rem;" class="table table-bordered">
+        <thead>
+            <tr>
+            <th scope="col" style="background-color: #333; color: white;">Order</th>
+            <th scope="col" style="background-color: #333;color: white;">Nom</th>
+            <th scope="col" style="background-color: #333;color: white;">Prenom</th>
+            <th scope="col" style="background-color: #333;color: white;">Action</th>
+            </tr>
+        </thead>
+        <tbody id="tbodyAffectationProf">
+            
+        </tbody>
+        </table>
+    </div>
+</div>
 {% endblock %}

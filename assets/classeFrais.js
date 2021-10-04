@@ -38,4 +38,30 @@ $(document).ready(function() {
         e.preventDefault();
       });
 
+      $('#updateFrais').on('change',  function (e) {
+        //alert("changed");
+        var idFrais = $(this).attr('data-id');
+        var prix = $('#updateFrais').val();
+        alert(idFrais,prix);
+        $.ajax({
+            url: "/admin/classe/updateFrais",
+            type: 'post',
+            data:{id:idFrais,prix:prix},
+            success: function (result) {
+           
+                Swal.fire(
+                    'Modification success',
+                    result,
+                    'success'
+                    )
+                
+            },
+            error: function(error) {
+                console.log(error)
+            }
+        }); 
+    });
+
+    //   
+
 });

@@ -46,6 +46,7 @@
                         </ul>
                     </li>
                     {% endif %}
+                    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_PROF') %}
                     <li  class="li">
                         <a class="li__a"><span class="fas fa-users"></span><span>Classe</span> <i class="bi bi-caret-down-fill {% if li == 'classe' %} activeRotate {% endif %}"></i></a>
                         <ul {% if li == 'classe' %}  style="display: block;" {% endif %}>
@@ -75,6 +76,7 @@
                             {% endif %}
                         </ul>
                     </li>
+                    {% endif %}
                     {% if is_granted('ROLE_ADMIN') %}
                     <li  class="li">
                         <a class="li__a"><span class="fas fa-users"></span><span>Matiere</span> <i class="bi bi-caret-down-fill {% if li == 'matiere' %} activeRotate {% endif %}"></i></a>
@@ -142,7 +144,7 @@
                             <p>Developer</p>
 
                             <ul>
-                                <li><a href="#">Profile</a></li>
+                                <li><a href="{{path('profile')}}">Profile</a></li>
                                 <li><a href="{{path('app_logout')}}">Logout</a></li>
                             </ul>
                         </div>

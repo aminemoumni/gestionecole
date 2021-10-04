@@ -1,22 +1,24 @@
-<form id="form_facture">
+{# 
+<form id="form_facture" name="form_facture" > #}
+ {# action="{{ path('facture', [{'nom':'bla'}] ) }}" method="post"  #}
 <div class="form-group">
     <ul>
         <li>
-            <p>Nom: <span>{{etudiant.nom}}</span></p>
+            <p>Nom: <span name="nom"  id="nom">{{etudiant.nom}}</span></p>
         </li>
         <li>
-            <p>Prenom: <span>{{etudiant.prenom}}</span></p>
+            <p>Prenom: <span name="prenom"  id="prenom">{{etudiant.prenom}}</span></p>
         </li>
         <li>
-            <p>Classe: <span>{{etudiant.classe.designation}}</span></p>
+            <p>Classe: <span name="classe"  id="classe">{{etudiant.classe.designation}}</span></p>
         </li>
     </ul>
-    <label class="col-md-3 control-label required" for="appbundle_theme_discipline" style="font-weight: bold">Classe</label>
+    <label class="col-md-3 control-label required" for="appbundle_theme_discipline" style="font-weight: bold">frais</label>
     <div class="col-md-9 chooseFrais">
         <select id="selectFrais"  class="form-control input-sm ">
             <div style="height: 200px; overflow-y: scroll ">
             <option>Choisir un frais</option>
-            {%for frais in frais %}
+            {% for frais in frais %}
                 <option value="{{frais.id}}">{{frais.designation}}</option>
             {% endfor %}
             </div>
@@ -24,7 +26,8 @@
         <button type="button" class="btn btn-secondary addEtudiantFrais">ajouter</button>
     </div>
 </div>
-<table style="margin-top: 2rem;" class="table table-bordered fraisEtudiant" name="tFacture">
+
+<table style="margin-top: 2rem;" class="table table-bordered fraisEtudiant" name="tFacture" id="tFacture">
   <thead>
     <tr>
       <th scope="col" style="background-color: #333; color: white;">Order</th>
@@ -33,9 +36,9 @@
       <th scope="col" style="background-color: #333;color: white;">Action</th>
     </tr>
   </thead>
-  <tbody id="tbodyFacture">
+  <tbody id="tbodyFacture" >
   </tbody>
 </table>
-<input type="submit" value="Imprimer la facture" class="btn btn-secondary btn-xs printFacture" >
-
-</form>
+<a href="{{ path('facture' ) }}" class="btn btn-secondary btn-xs printFacture" >Imprimer la facture </a>
+{# 
+</form> #}

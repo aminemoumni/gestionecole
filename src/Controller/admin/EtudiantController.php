@@ -140,15 +140,16 @@ class EtudiantController extends AbstractController
     public function adminInscriptionValider(Request $request,Inscription $inscription): Response
     {      
         $etudiant=new Etudiant();
-        $classe=$inscription->getClasse()->getId();
+        // $classe=$inscription->getClasse()->getId();
         $etudiant->setNom($inscription->getNom());
         $etudiant->setPrenom($inscription->getPrenom());
         $etudiant->setDateNaiss($inscription->getDateNaiss());
         $etudiant->setVille($inscription->getVille());
         // $etudiant->setClasse($inscription->getClasse());
-        $etudiant->setUser($inscription->getId());
+       // dd($$inscription->getUser()->getId());
+        $etudiant->setUser($inscription->getUser());
         $etudiant->setCodeAdmission('1');
-        // dd($inscription->getClasse());
+        //
         //dd($etudiant);
         
         $this->em->persist($etudiant);

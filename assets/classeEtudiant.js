@@ -117,32 +117,48 @@ $(document).ready(function() {
 
     //  });
 
-    $( "#form_facture" ).submit(function(e) {
-        var data = {};
-        $.each($('#form_facture').serializeArray(), function(i, field) {
-            data[field.name] = field.value;
-        });
-        console.log(data)
-        $.ajax({
-            url: "/admin/classe/facture",
-            type: 'post',
-            data:{data:data},
-            success: function (result) {
-                Swal.fire(
-                    'imprimer facture',
-                    result,
-                    'success'
-                )
+    // $('body').on('click', '.printFacture',function(e) {
+        
+    //    // alert('hello');
+
+    // //    var facture=[];
+    //    var dataArr=[];
+    //        $("#tbodyFacture tr").each(function(){
+    //         dataArr.push($(this).html());
+    //        });
+           
+         
+    //     // dataArr.replace("</tr>", "");
+    //     // dataArr.replace("</td>", "");
+    //     // facture.push(dataArr.split("<tr>"));
+    //     //
+        
+    //     console.log(dataArr)
+    //     $.ajax({
+    //         url: "/admin/classe/facture",
+    //         type: 'post',
+    //         data:{dataArr:dataArr},
+    //         success: function (result) {
                 
-            },
-            error: function(error) {
-                console.log(error)
-            }
-        });
+                
+    //         },
+    //         error: function(error) {
+    //             console.log(error)
+    //         }
+
+    //     });
 
         
-      });
+    //   });
 
+   
+       
+     
+    // dataArr.replace("</tr>", "");
+    // dataArr.replace("</td>", "");
+    // facture.push(dataArr.split("<tr>"));
+    //
+    
 
 
 

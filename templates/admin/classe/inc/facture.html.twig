@@ -14,22 +14,30 @@
                 </div>
                 <div >
                     <div style="font-weight: bold;">
-                        <label>Nom : </label>
-                        <label>Prenom :</label>
-                        <label>Classe :</label>
+                        <label>Nom : {{etudiant.nom}}</label>
+                        <label>Prenom : {{etudiant.prenom}}</label>
+                        <label>Classe : {{etudiant.classe.designation}}</label>
                         <br/>
                         <label>Fait le : {{ "now"|date("d/m/Y") }}</label>
+                        {% set somme = 0 %}
                         <table style="margin-top: 5rem; margin-left: auto; margin-right: auto;" class="table table-bordered fraisEtudiant" >
                             <thead>
                                 <tr>
                                     <th scope="col" style="background-color: #333;color: white;">Designation</th>
                                     <th scope="col" style="background-color: #333;color: white;">Prix</th>
                                 </tr>
+                                {# {% for row in facture %} #}
+                                <tr>
+                                 <td>{{facture['0']}}</td>
+                                 <td>{{facture['1']}}</td>
+                                </tr>
+                                {% set somme = somme + facture['1'] %}
+                                {# {% endfor %} #}
                             </thead>
                             <tbody id="tbodyFacture">
                             </tbody>
                         </table>
-                        <label>Somme : </label>
+                        <label>Somme :{{somme}} </label>
                     </div>
                 </div>
             </div>

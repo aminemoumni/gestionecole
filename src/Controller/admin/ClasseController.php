@@ -23,6 +23,8 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Form\FormBuilder;
+use Symfony\Component\Form\Forms;
 
 /**
  * @Route("/admin/classe")
@@ -203,7 +205,6 @@ class ClasseController extends AbstractController
             
                 $actions = "<div class='actions'>"
                 . " <i class='bi bi-eye seeClass'  data-id='".$row['id']."'></i>"
-                . " <i class='bi bi-person-lines-fill seeMatiere'  data-id='".$row['id']."'></i>"
                 . " <i class='bi bi-trash deleteProfesseur'  data-id='".$row['id']."'></i>"
                 . "</div>";
             
@@ -586,6 +587,7 @@ class ClasseController extends AbstractController
         $this->em->persist($frais);
         
         $this->em->flush();
+        
         return new JsonResponse("success");
        
     }
@@ -605,6 +607,12 @@ class ClasseController extends AbstractController
             'frais' => $frais
         ]);
         // dd($html->getContent());
+        $session = $request->getSession();
+        $session->set('idE',$idEtudiant);
+       
+        //$session->set('facture', '');
+        
+    
         return new JsonResponse($html->getContent());
 
     }
@@ -616,10 +624,21 @@ class ClasseController extends AbstractController
         $idFrais = $request->request->get('id');
         $frais=$this->em->getRepository(Frais::class)->find($idFrais);
         $index=$request->request->get('index');
-        $html = "<tr><td>".$index."</td>"
-               ."<td>".$frais->getDesignation()."</td>"
-               ."<td>".$frais->getPrix()."</td>" 
-               ."<td><i class='bi bi-trash deleteFraisEtudiant'  data-id='".$index."'></i></td></tr>";
+        $session = $request->getSession();
+        
+        
+        
+        
+        $tables['0'] = $frais->getDesignation();
+        $tables['1'] = $frais->getPrix();
+        $session->set('tables', $tables);
+
+        $facture[$index]=$session->get('tables');     
+        $session->set('facture', $facture);
+        $html = "<tr> <td> ".$index." </td> "
+               ." <td> ".$frais->getDesignation()." </td> "
+               ." <td> ".$frais->getPrix()." </td> " 
+               ." <td> <i class='bi bi-trash deleteFraisEtudiant'  data-id='".$index."'></i> </td> </tr>";
         //dd($html);
         return new JsonResponse($html);
 
@@ -629,88 +648,39 @@ class ClasseController extends AbstractController
     */
     public function facture(Request $request)
     {
-        $value = $request->request->get('data');
-        // $data=$request->request->get('data');
-       dd($value);
+        
+        $session = $request->getSession();
+        $etudiant= $this->em->getRepository(Etudiant::class)->find($session->get('idE'));
+         $session->get('tables');
+         $facture=$session->get('tables');
         $mpdf= new Mpdf();
         $html = $this->renderView('admin/classe/inc/facture.html.twig', [
             'title' => "Facture" ,
+            'etudiant'=>$etudiant,
+            'facture'=>$facture
             
         ]);
        
         $mpdf->WriteHtml($html);
         $mpdf->Output('facture.pdf','D');
+        
         return new Response('The PDF file has been succesfully generated !');
     }
+   
+    
+
     /**
-     * @Route("/ProffeseurMatiere", name="ProffeseurMatiere")
+     * @Route("/updateFrais", name="admin_update_frais")
      */
-    public function proffeseurMatiere(Request $request): Response
+    public function updateFrais(Request $request): Response
     {
-        $idProfesseur = $request->request->get('id');
-        $professeur = $this->em->getRepository(Professeur::class)->find($idProfesseur);
-        $sqlRequest = "Select * from matiere where matiere.id not in (select matiere_id from professeur_matiere where professeur_id = $idProfesseur)";
-        $stmt = $this->getDoctrine()->getManager()->getConnection()->prepare($sqlRequest);
-        $stmt->execute();
-        $matieres = $stmt->fetchAll();
-        
-        $html = $this->render('admin/classe/inc/matiereProffesor.html.twig', [
-            'professeur' => $professeur,
-            'matieres' => $matieres
-        ]);
-        // dd($html->getContent());
-        return new JsonResponse($html->getContent());
-
-    }
-     /**
-     * @Route("/admin_set_matiere", name="admin_set_matiere")
-     */
-    public function adminSetMatiere(Request $request): Response
-    {
-        $idMatiere = $request->request->get('idMatiere');
-        $idProfesseur = $request->request->get('idProfesseur');
-
-        $professeur = $this->em->getRepository(Professeur::class)->find($idProfesseur);
-        $matiere=$this->em->getRepository(Matiere::class)->find($idMatiere);
-        $professeur->addMatiere($matiere);
-        $this->em->flush();
-        $sqlRequest = "Select * from matiere where matiere.id not in (select matiere_id from professeur_matiere where professeur_id = $idProfesseur)";
-        $stmt = $this->getDoctrine()->getManager()->getConnection()->prepare($sqlRequest);
-        $stmt->execute();
-        $matieres = $stmt->fetchAll();
-      
-        $html = $this->render('admin/classe/inc/matiereProffesor.html.twig', [
-            'professeur' => $professeur,
-            'matieres' => $matieres
-        ]);
-        
-        return new JsonResponse($html->getContent());
-
-    }
-    /**
-     * @Route("/admin_matiereProfesseur_annuler", name="admin_matiereProfesseur_annuler")
-     */
-    public function adminMatiereAnnuler(Request $request): Response
-    {
-        
-        $idMatiere = $request->request->get('idMatiere');
-        $idProfesseur = $request->request->get('idProfesseur');
-        $professeur = $this->em->getRepository(Professeur::class)->find($idProfesseur);
-        $matiere=$this->em->getRepository(Matiere::class)->find($idMatiere);
-        $professeur->removeMatiere($matiere);
+        $idFrais=$request->request->get('id');
+        $prix=$request->request->get('prix');
+        $frais=$this->em->getRepository(Frais::class)->find($idFrais);
+        $frais->setPrix($prix);
+        $this->em->persist($frais);
         $this->em->flush();
 
-        $sqlRequest = "Select * from matiere where matiere.id not in (select matiere_id from professeur_matiere where professeur_id = $idProfesseur)";
-        $stmt = $this->getDoctrine()->getManager()->getConnection()->prepare($sqlRequest);
-        $stmt->execute();
-        $matieres = $stmt->fetchAll();
-      
-        $html = $this->render('admin/classe/inc/matiereProffesor.html.twig', [
-            'professeur' => $professeur,
-            'matieres' => $matieres
-        ]);
-        
-        return new JsonResponse($html->getContent());
-
+        return new JsonResponse("success");
     }
 }

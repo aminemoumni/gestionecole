@@ -149,15 +149,15 @@ class EtudiantController extends AbstractController
                 "id" => $rows->getId(),
                 "start" => $rows->getHeureD()->format('Y-m-d H:i:s'),
                 "end" => $rows->getHeureF()->format('Y-m-d H:i:s'),
-                "title" => $rows->getDesignation(),
+                "title" => $rows->getDesignation().' '. $rows->getMatiere()->getDesignation(),
                 "backgroundColor" => 'blue',
                 "borderColor" => 'black',
-                "textColor" => 'black',
+                "textColor" => 'white',
                 "allDay" => false
             ];
         }
 
-        $dataCourses = json_encode($courses);
+    
 
         $epreuves = [];
 
@@ -166,23 +166,22 @@ class EtudiantController extends AbstractController
                 "id" => $rows->getId(),
                 "start" => $rows->getHeureDebut()->format('Y-m-d H:i:s'),
                 "end" => $rows->getHeureFin()->format('Y-m-d H:i:s'),
-                "title" => $rows->getDesingation(),
+                "title" => $rows->getDesingation().' '. $rows->getMatiere()->getDesignation(),
                 "backgroundColor" => 'red',
                 "borderColor" => 'black',
-                "textColor" => 'black',
+                "textColor" => 'white',
                 "allDay" => false
             ];
         }
-
-        $dataEpreuves = json_encode($epreuves);
-        //dd($dataCourses,$dataEpreuves);
+        $events=array_merge($courses, $epreuves);
+        $dataEvents = json_encode($events);
+ 
         return $this->render('etudiant/planification.html.twig',
         
         [
             'li' => 'child',
             'i' => $index,
-            "courses"=>compact('dataCourses'),
-            "epreuves"=>compact('dataEpreuves')
+            'events'=>compact('dataEvents')
         ]);
     }
 

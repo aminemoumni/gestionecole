@@ -1,0 +1,36 @@
+<div class="form-group">
+    
+    <label class="col-md-3 control-label required" for="appbundle_theme_discipline" style="font-weight: bold">Professeur</label>
+    <div class="col-md-9 chooseProf">
+        <select id="selectProf"  class="form-control input-sm ">
+            <div style="height: 200px; overflow-y: scroll ">
+            <option>Choisir un professeur</option>
+            {%for professeur in professeurs %}
+                <option value="{{professeur.id}}">{{professeur.name}} {{professeur.prenom}}</option>
+            {% endfor %}
+            </div>
+        </select>
+        <button type="button" class="btn btn-secondary addProfesseurMatiere" data-idMatiere='{{matiere.id}}'>ajouter</button>
+    </div>
+</div>
+<table style="margin-top: 2rem;" class="table table-bordered matiereProfesseur">
+  <thead>
+    <tr>
+      <th scope="col" style="background-color: #333; color: white;">Order</th>
+      <th scope="col" style="background-color: #333;color: white;">Nom</th>
+      <th scope="col" style="background-color: #333;color: white;">Prenom</th>
+      <th scope="col" style="background-color: #333;color: white;">Action</th>
+    </tr>
+  </thead>
+  <tbody id="tbodyAffectationProf">
+    {% for i, professeur in matiere.professeurs %}
+        <tr>
+            <td> {{ i + 1}} </td>
+            <td> {{ professeur.name}} </td>
+            <td> {{ professeur.prenom}} </td>
+            <td>  <i  class='bi bi-dash-circle desafecterProfesseurMatiere' data-idMatiere='{{matiere.id}}' data-idProfesseur='{{professeur.id}}'></i> </td>
+
+        </tr>
+    {% endfor %}
+  </tbody>
+</table>

@@ -46,4 +46,67 @@ $(document).ready(function() {
             }
         });
     });
+
+
+
+    $('body').on('click', '.seeProfesseur', function (e) {
+        var id = $(this).attr('data-id');
+        $('.overlayOuvrage, .popOuvrage, .loadingScreen').show()
+
+        
+        $.ajax({
+            url: "/admin/matiere/admin_get_matiere",
+            type: 'post',
+            data:{id:id},
+            success: function (result) {
+                $('.contentMatiere').html(result)
+                $(".loadingScreen").hide()
+            },
+            error: function(error) {
+                console.log(error)
+            }
+        });
+    });
+
+    $('body').on('click', '.addProfesseurMatiere', function (e) {
+            
+        var idProfesseur = $('#selectProf').val(); 
+        var idMatiere = $(this).attr('data-idMatiere'); 
+       
+         $.ajax({
+            url: "/admin/matiere/admin_set_professeur",
+            type: 'post',
+            data:{idMatiere:idMatiere,idProfesseur:idProfesseur},
+            success: function (result) {
+
+                $('.contentMatiere').html(result)
+            },
+            error: function(error) {
+                console.log(error)
+            }
+        });
+     
+    });  
+
+
+    $('body').on('click', '.desafecterProfesseurMatiere', function (e) {
+            
+        var idMatiere = $(this).attr('data-idMatiere');
+        var idProfesseur = $(this).attr('data-idprofesseur');
+        
+         $.ajax({
+            url: "/admin/matiere/admin_Professeur_annuler",
+            type: 'post',
+            data:{idMatiere:idMatiere,idProfesseur:idProfesseur},
+            success: function (result) {
+                $('.contentMatiere').html(result)
+            },
+            error: function(error) {
+                console.log(error)
+            }
+        });
+     
+    }); 
+
+
 });

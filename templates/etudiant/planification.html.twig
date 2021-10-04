@@ -9,10 +9,13 @@
               margin:auto;
          }
 </style>
- {# {{dump(courses,epreuves)}} #}
+ {# {{dump(events)}} #}
  <div id="planning"></div>
 <script>
+
+
     window.onload=()=>{
+      
       
         var calendarEl = document.getElementById('planning');
         var calendar = new FullCalendar.Calendar(calendarEl, {
@@ -23,8 +26,7 @@
               center:'title',
               end:'timeGridWeek,dayGridMonth'
           },
-          events: {{courses|raw}}
-           
+          events: {{events["dataEvents"]|raw}}
           
         });
         calendar.render();
